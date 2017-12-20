@@ -1,4 +1,15 @@
 <resources>
-    <string name="app_name">Dark Calc</string>
+    <string name="app_name">EasyCalc</string>
     <string name="action_settings">Settings</string>
+    <string name="erase_to_the_left">\u232b</string>
+    <string name="del">⟵</string>
+    <string name="backspace">⇦</string>
+    <string name="undo">↺</string>
+    <string name="redo">↻</string>
+    <string name="x2">x²</string>
+    <string name="sqr">√</string>
+    <string name="mul">×</string>
+    <string name="div">÷</string>
+    <string name="sub">\u2212</string>
+    <string name="add">+</string>
 </resources>
