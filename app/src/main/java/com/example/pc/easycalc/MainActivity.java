@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             int childCount = row.getChildCount();
             for (int i= 0; i < childCount; i++){
                 Button boton = (Button) row.getChildAt(i);
-                boton.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFFAA0000));
+                //boton.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFFAA0000));
 
                 boton.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){

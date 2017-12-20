@@ -6,4 +6,6 @@
     <color name="sky">#0099ff</color>
     <color name="cyan">#99ffff</color>
     <color name="green">#99ff00</color>
+    <color name="orange1">#F27C21</color>
+    <color name="orange2">#F9A11F</color>
 </resources>

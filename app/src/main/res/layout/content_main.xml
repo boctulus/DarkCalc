@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="90sp"
-        android:textColor="@color/green"
+        android:textColor="@color/orange2"
         android:enabled="false"
         android:gravity="bottom"
         android:lines="1"
