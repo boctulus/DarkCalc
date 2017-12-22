@@ -1,11 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="sky">#0099ff</color>
-    <color name="cyan">#99ffff</color>
-    <color name="green">#99ff00</color>
-    <color name="orange1">#F27C21</color>
-    <color name="orange2">#F9A11F</color>
+    <color name="white">#ffffff</color>
+
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">#766A26</color>
+
+    <color name="pink">#FF4081</color>
+    <color name="pink2">#FF80AB</color>
+    <color name="pink3">#F50057</color>
+
+    <color name="red">#BA0900</color>
+    <color name="red1">#D30000</color>
+    <color name="red2">#FF001F</color>
+    <color name="red3">#F20012</color>
+    <color name="red4">#D30000</color>
+    <color name="red5">#BA0900</color>
+
+    <color name="violet">#6A1B9A</color>
+    <color name="violet2">#9C27B0</color>
+
+    <color name="blue">#3F51B5</color>
+    <color name="blue1">#C5CAE9</color>
+    <color name="blue2">#3F51B5</color>
+    <color name="blue3">#303F9F</color>
+    <color name="blue_4">#074D72</color>
+
+    <color name="cyan">#00F7FA</color>
+
+    <color name="green">#00AA8D</color>
+    <color name="green1">#00BF9A</color>
+    <color name="green2">#008975</color>
+
+    <color name="blueGrey">#455A64</color>
+    <color name="blueGrey1">#90A4AE</color>
+    <color name="blueGrey2">#263238</color>
+
+    <color name="orange">#F09300</color>
+    <color name="yellow">#F4B400</color>
+
+    <color name="brown">#685E21</color>
+    <color name="brown1">#766A26</color>
+    <color name="brown2">#8D8044</color>
+    <color name="brown3">#867937</color>
+    <color name="brown4">#766A26</color>
+    <color name="brown5">#685E21</color>
+
+
+    /* Fosforescentes */
+
+    <color name="fblue">#0099ff</color>
+    <color name="fgreen">#69F0AE</color>
+
+    /* Dark theme palette
+       - https://goo.gl/BZYF57 -
+    */
+
+    <color name="black">#000000</color>
+    <color name="grey1">#212121</color>
+    <color name="grey2">#303030</color>
+    <color name="grey3">#424242</color>
+
+
+    /* No estandar */
+    <color name="quasiWhite">#A5A5A5</color>
+
 </resources>

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,15 +49,24 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
-        TextView display = findViewById(R.id.display);
+        AutoResizeEditText display = findViewById(R.id.resDisplay);
         display.setText("");
+        display.setEnabled(true);
+        display.setFocusableInTouchMode(true);
+        display.setFocusable(true);
+        display.setEnableSizeCache(false);
+        display.setMovementMethod(null);
+        // can be added after layout inflation; it doesn't have to be fixed
+        // value
+        display.setMaxHeight(330);
+
 
         LinearLayout root = (LinearLayout) findViewById(R.id.root);
 
         for (int rix = 0; rix< root.getChildCount(); rix++){
             View elem = (View) root.getChildAt(rix);
 
-            // el TextView no es un contenedor
+            // no es un contenedor
             if (elem.getId() == R.id.display)
                 continue;
 
@@ -69,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
                 boton.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){
-                        TextView display = findViewById(R.id.display);
+                        TextView display = findViewById(R.id.resDisplay);
                         Button b = (Button) v;
 
                         String newEntry = b.getText().toString();
