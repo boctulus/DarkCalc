@@ -10,6 +10,7 @@
 
 
     <!-- botonera -->
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +29,7 @@
         <Button
             android:text="@string/undo"
             style="@style/ButtonStyle"
-            android:textColor="@color/grey1"
+            android:textColor="@color/white"
             android:background="@drawable/custom_button_yellow"
             android:id="@+id/undo"
             />
@@ -36,9 +37,33 @@
         <Button
             android:text="@string/redo"
             style="@style/ButtonStyle"
-            android:textColor="@color/grey1"
+            android:textColor="@color/white"
             android:background="@drawable/custom_button_yellow"
             android:id="@+id/redo"
+            />
+
+        <Button
+            android:text="MRC"
+            style="@style/ButtonStyle"
+            android:textColor="@color/grey1"
+            android:background="@drawable/custom_button_green"
+            android:id="@+id/mrc"
+            />
+
+        <Button
+            android:text="M-"
+            style="@style/ButtonStyle"
+            android:textColor="@color/grey1"
+            android:background="@drawable/custom_button_green"
+            android:id="@+id/mm"
+            />
+
+        <Button
+            android:text="M+"
+            style="@style/ButtonStyle"
+            android:textColor="@color/grey1"
+            android:background="@drawable/custom_button_green"
+            android:id="@+id/mp"
             />
 
         <Button
@@ -58,44 +83,28 @@
 
 
         <Button
-            android:text="MC"
+            android:text="sin"
             style="@style/ButtonStyle"
-            android:textColor="@color/grey1"
-            android:background="@drawable/custom_button_green"
-            android:id="@+id/mc"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/sin"
             />
 
         <Button
-            android:text="MR"
+            android:text="cos"
             style="@style/ButtonStyle"
-            android:textColor="@color/grey1"
-            android:background="@drawable/custom_button_green"
-            android:id="@+id/mr"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/cos"
             />
 
         <Button
-            android:text="M-"
+            android:text="tan"
             style="@style/ButtonStyle"
-            android:textColor="@color/grey1"
-            android:background="@drawable/custom_button_green"
-            android:id="@+id/mm"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/tan"
             />
-
-        <Button
-            android:text="M+"
-            style="@style/ButtonStyle"
-            android:textColor="@color/grey1"
-            android:background="@drawable/custom_button_green"
-            android:id="@+id/mp"
-            />
-    </LinearLayout>
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0">
-
-
 
         <Button
             android:text="%"
@@ -138,6 +147,30 @@
 
 
         <Button
+            android:text="@string/p2x"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/p2x"
+            />
+
+        <Button
+            android:text="@string/pex"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/pex"
+            />
+
+        <Button
+            android:text="@string/p10x"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/p10x"
+            />
+
+        <Button
             android:text="7"
             style="@style/ButtonStyle"
             android:textColor="@color/white"
@@ -176,6 +209,30 @@
         android:layout_weight="1.0">
 
 
+
+        <Button
+            android:text="@string/log2"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/log2"
+            />
+
+        <Button
+            android:text="ln"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/ln"
+            />
+
+        <Button
+            android:text="log"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/log"
+            />
 
         <Button
             android:text="4"
@@ -218,6 +275,30 @@
 
 
         <Button
+            android:text="Pi"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/pi"
+            />
+
+        <Button
+            android:text="e"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/e"
+            />
+
+        <Button
+            android:text="Avg"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/avg"
+            />
+
+        <Button
             android:text="1"
             style="@style/ButtonStyle"
             android:textColor="@color/white"
@@ -258,6 +339,30 @@
 
 
         <Button
+            android:text="@string/sum"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/sum"
+            />
+
+        <Button
+            android:text="x!"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/xp"
+            />
+
+        <Button
+            android:text="@string/pxy"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/pxy"
+            />
+
+        <Button
             android:text="."
             style="@style/ButtonStyle"
             android:textColor="@color/white"
@@ -289,7 +394,6 @@
             android:id="@+id/add"
             />
     </LinearLayout>
-
 
 
 </LinearLayout>

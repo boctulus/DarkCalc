@@ -12,4 +12,11 @@
     <string name="div">÷</string>
     <string name="sub">\u2212</string>
     <string name="add">+</string>
+    <string name="log2">log₂  </string>
+    <string name="p2x">2<sup><small>x</small></sup></string>
+    <string name="pex">e<sup><small>x</small></sup></string>
+    <string name="p10x">10<sup><small>x</small></sup></string>
+    <string name="pxy">x<sup><small>y</small></sup></string>
+    <string name="pi">π</string>
+    <string name="sum">∑</string>
 </resources>

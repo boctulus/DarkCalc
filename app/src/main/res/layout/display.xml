@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="DisplayContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_weight="10"
+    android:background="@color/grey3"
+    android:id="@+id/display"
+    >
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/hotDisplayContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0">
+
+        <com.example.pc.easycalc.AutoResizeEditText
+            style="@style/DisplayStyle"
+            android:id="@+id/hotDisplay"
+            android:textColor="@color/quasiWhite"
+            android:textSize="24sp"
+            android:text="12 +"
+            android:paddingTop="5sp"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/resDisplayContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3.0">
+
+        <com.example.pc.easycalc.AutoResizeEditText
+            style="@style/DisplayStyle"
+            android:id="@+id/resDisplay"
+            android:textSize="60sp"
+            android:text="EASY CALC"
+            android:gravity="top|end"
+            android:paddingBottom="5sp"
+            android:inputType="text"
+            android:textIsSelectable="true"
+            />
+        <!--
+
+        -->
+
+    </LinearLayout>
+
+</LinearLayout>

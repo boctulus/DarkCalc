@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.pc.easycalc.MainActivity"
+    >
+    <item
+        android:id="@+id/itemcopy"
+        android:orderInCategory="150"
+        app:showAsAction="ifRoom|withText"
+        android:title="Copy"
+        android:titleCondensed="Copy"
+        />
+    <item
+        android:id="@+id/itempaste"
+        android:orderInCategory="200"
+        app:showAsAction="ifRoom|withText"
+        android:title="Paste"
+        android:titleCondensed="Paste"
+        />
+</menu>
