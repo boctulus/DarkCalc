@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         res_display.setEnabled(true);
         res_display.setFocusableInTouchMode(true);
         res_display.setFocusable(true);
+        res_display.requestFocus();
         //res_display.setEnableSizeCache(false);
         //res_display.setMovementMethod(null);
         //res_display.setMaxHeight(330);
