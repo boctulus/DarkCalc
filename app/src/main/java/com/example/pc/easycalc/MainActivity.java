@@ -20,6 +20,9 @@ import android.widget.LinearLayout;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity
 {
@@ -32,6 +35,14 @@ public class MainActivity extends AppCompatActivity
     static final String DEBUG = "DEBUG";
 
 
+    private void hideBar(){
+        //to remove "information bar" above the action bar
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //to remove the action bar (title bar)
+
+        getSupportActionBar().hide();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -39,14 +50,14 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        hideBar();
+
+        // Reserved keywords
+        String[] constantStr_lst = new String[]{"Pi","PI","π","e","NA"};
+        String[] function_lst    = new String[]{"sin","cos","tan","arcsin","arccos","arctan", "sinh","cosh","tanh","arcsinh","arccosh","arcanh","sum","prod","ln","log","log2","log10"};
+        final List<String> functions = Arrays.asList(function_lst);
+
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-
-        //to remove "information bar" above the action bar
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //to remove the action bar (title bar)
-
-        getSupportActionBar().hide();
 
 
         /* Evito colapsen los displays */
@@ -411,10 +422,41 @@ public class MainActivity extends AppCompatActivity
                             // Parenthesis
 
                             case R.id.par:
-                                if (countMatches("(",buffer)<=countMatches(")",buffer))
+
+                                if (buffer.isEmpty())
                                     display.append("(");
                                 else
-                                    display.append(")");
+                                    if (buffer.endsWith("("))
+                                        display.append("(");
+                                    else
+                                        if (is_number) {
+                                            if (balancedParenthesis(buffer))
+                                                display.append("×(");
+                                            else
+                                                display.append(")");
+                                        }else
+                                            if (buffer.endsWith(")"))
+                                                if (balancedParenthesis(buffer))
+                                                    display.append("×(");
+                                                else
+                                                    display.append(")");
+                                            else {
+                                                boolean fn_found = false;
+                                                for (String fn : functions) {
+                                                    if (buffer.endsWith(fn)){
+                                                        display.append("(");
+                                                        fn_found = true;
+                                                        break;
+                                                    }
+                                                }
+                                                if (!fn_found)
+                                                    if (buffer.endsWith("+") || buffer.endsWith("-") ||
+                                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                                        display.append("(");
+                                                    else
+                                                        // asumo es una constante como 'π' o 'e'
+                                                        display.append(")");
+                                            }
 
                                 is_number = false;
                                 has_dot   = false;
@@ -506,6 +548,18 @@ public class MainActivity extends AppCompatActivity
 
 
     } // end fn
+
+    private boolean openedParenthesis(String expr){
+        return (!expr.isEmpty() && (countMatches("(",expr)>countMatches(")",expr)));
+    }
+
+    private boolean closedParenthesis(String expr){
+        return (!expr.isEmpty() && (countMatches("(",expr)<countMatches(")",expr)));
+    }
+
+    private boolean balancedParenthesis(String expr){
+        return (!expr.isEmpty() && (countMatches("(",expr)==countMatches(")",expr)));
+    }
 
     private void setError(String msg){
         has_error = true;
