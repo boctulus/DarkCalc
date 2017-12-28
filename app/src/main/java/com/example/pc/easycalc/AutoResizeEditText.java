@@ -33,6 +33,9 @@ public class AutoResizeEditText extends android.support.v7.widget.AppCompatEditT
     private boolean _initiallized = false;
     private TextPaint paint;
 
+    final static String DEBUG  = "DEBUG";
+
+
     private interface SizeTester {
         /**
          * AutoResizeEditText
@@ -280,4 +283,12 @@ public class AutoResizeEditText extends android.support.v7.widget.AppCompatEditT
         if (width != oldwidth || height != oldheight)
             reAdjust();
     }
+
+
+    @Override
+    public boolean isSuggestionsEnabled(){
+        return false;
+    }
+
+
 }

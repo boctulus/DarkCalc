@@ -24,8 +24,8 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ButtonStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:layout_margin">3sp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textColor">#ffffff</item>
@@ -36,6 +36,8 @@
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">2</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:paddingBottom">@dimen/button_paddingBottom</item>
     </style>
     <!-- item name="android:textStyle">bold</item -->
 

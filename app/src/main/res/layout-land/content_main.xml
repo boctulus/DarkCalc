@@ -273,14 +273,12 @@
         android:layout_weight="1.0">
 
 
-
         <Button
-            android:text="Pi"
-            style="@style/ButtonStyle"
-            android:textColor="@color/white"
-            android:background="@drawable/custom_button_purple"
             android:id="@+id/pi"
-            />
+            style="@style/ButtonStyle"
+            android:background="@drawable/custom_button_purple"
+            android:text="@string/pi"
+            android:textColor="@color/white" />
 
         <Button
             android:text="e"
@@ -291,11 +289,11 @@
             />
 
         <Button
-            android:text="Avg"
+            android:text="@string/NA"
             style="@style/ButtonStyle"
             android:textColor="@color/white"
             android:background="@drawable/custom_button_purple"
-            android:id="@+id/avg"
+            android:id="@+id/na"
             />
 
         <Button

@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
@@ -18,19 +17,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
-public class MainActivity extends AppCompatActivity {
 
-    private double total = Double.NaN;
-    private double val1;
-    private double val2;
-
-    private char op1;
-    private char op2;
+public class MainActivity extends AppCompatActivity
+{
+    private boolean has_error = false;
+    private boolean is_number = false;
+    private boolean has_dot   = false;
 
     private  ClipboardManager clipboardManager;
 
-    static final String TAG = "DEBUG";
+    static final String DEBUG = "DEBUG";
 
 
 
@@ -41,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-
 
         //to remove "information bar" above the action bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -80,18 +78,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        EditText res_display = findViewById(R.id.resDisplay);
-
-        if (res_display.getText().toString() == "EASY CALC")
-            res_display.setText("");
-
+        AutoResizeEditText res_display = findViewById(R.id.resDisplay);
         res_display.setEnabled(true);
         res_display.setFocusableInTouchMode(true);
         res_display.setFocusable(true);
         res_display.requestFocus();
-        //res_display.setEnableSizeCache(false);
+        res_display.setEnableSizeCache(false);
         //res_display.setMovementMethod(null);
         //res_display.setMaxHeight(330);
+        //res_display.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+        //if (res_display.getText().toString() == "EASY CALC")
+        //   res_display.setText("");
 
 
         // Register the context menu to the the EditText
@@ -101,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout root = (LinearLayout) findViewById(R.id.root);
 
         for (int rix = 0; rix< root.getChildCount(); rix++){
-            View elem = (View) root.getChildAt(rix);
+            final View elem = (View) root.getChildAt(rix);
 
             // no es un contenedor
             if (elem.getId() == R.id.display)
@@ -119,83 +117,371 @@ public class MainActivity extends AppCompatActivity {
                         EditText display = findViewById(R.id.resDisplay);
                         Button b = (Button) v;
 
+                        int id = b.getId();
                         String newEntry = b.getText().toString();
                         String buffer = display.getText().toString();
 
-                        switch (newEntry)
+                        //Log.d(DEBUG,newEntry+" ("+id+")");
+
+                        switch (id)
                         {
-                            case "C":
-                                display.setText("");
-                                total = 0;
-                                op1 = '\u0000';
+                            case R.id.c:
+                                clearEntry();
                                 return;
 
-                            case "M+":
+                            case R.id.mp:
                                 return;
 
-                            case "M-":
+                            case R.id.mm:
                                 return;
 
-                            case "DEL":
+                            case R.id.del:
+                                if (has_error) {
+                                    clearEntry();
+                                    return;
+                                }
 
-                            case "\u232b":
                                 if (buffer.length()>0)
                                     display.setText( buffer.substring(0,buffer.length()-1) );
                                 return;
 
                             // Operators
 
-                            case "+":
-                                Log.d("DEBUG",buffer.substring(buffer.length()-1));
+                            case R.id.add:
+                                if (!buffer.endsWith("+"))
+                                    if (buffer.endsWith("-") || buffer.endsWith("×") ||
+                                            buffer.endsWith("÷")  )
+                                        display.setText( buffer.substring(0,buffer.length()-1)+"+" );
+                                    else
+                                        display.setText(buffer + newEntry);
 
-                                if (!buffer.endsWith(newEntry))
-                                    display.setText(buffer + newEntry);
+                                is_number = false;
+                                has_dot   = false;
                                 return;
 
-                            case "-":
-                                if (!buffer.endsWith(newEntry))
-                                    display.setText(buffer + newEntry);
+                            case R.id.sub:
+                                if (!buffer.endsWith("\u2212"))
+                                    if (buffer.endsWith("+"))
+                                        display.setText( buffer.substring(0,buffer.length()-1)+"-" );
+                                    else
+                                        if (buffer.endsWith("×") || buffer.endsWith("÷"))
+                                            display.setText(buffer + "(-");
+                                         else
+                                            display.setText(buffer + "-");
+
+                                is_number = false;
+                                has_dot   = false;
                                 return;
 
-                            case "×":
-                                if (!buffer.endsWith(newEntry))
-                                    display.setText(buffer + newEntry);
+                            case R.id.mul:
+                                if (!buffer.endsWith("×"))
+                                    if (buffer.endsWith("+") || buffer.endsWith("-") || buffer.endsWith("÷") )
+                                        display.setText( buffer.substring(0,buffer.length()-1)+"×" );
+                                    else
+                                        display.setText(buffer + newEntry);
+
+                                is_number = false;
+                                has_dot   = false;
                                 return;
 
-                            case "÷":
-                                if (!buffer.endsWith(newEntry))
-                                    display.setText(buffer + newEntry);
+                            case R.id.div:
+                                if (!buffer.endsWith("÷"))
+                                    if (buffer.endsWith("+") || buffer.endsWith("-") || buffer.endsWith("×") )
+                                        display.setText( buffer.substring(0,buffer.length()-1)+"÷" );
+                                    else
+                                        display.setText(buffer + newEntry);
+
+                                is_number = false;
+                                has_dot   = false;
                                 return;
 
-                            case "1/x":
-                                display.setText(buffer + newEntry);
-                                return;
-
-                            case "√":
-                                display.setText(buffer + newEntry);
-                                return;
-
-                            case "%":
+                            case R.id.per:
                                 // si el operador anterior no es + o -, ignorar
                                 // si se repite, ignorar
 
                                 if (!buffer.endsWith(newEntry))
                                     display.setText(buffer + newEntry);
 
+                                is_number = false;
+                                has_dot   = false;
                                 return;
 
-                            case "=":
+                           // Functions
+
+                            case R.id.inv:
+                                if (buffer.isEmpty())
+                                    display.setText("1/(");
+                                else
+                                    display.setText("1÷("+buffer+")");
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            case R.id.sqr:
+                                if (buffer.isEmpty())
+                                    display.setText(newEntry+"(");
+                                else
+                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        display.setText(buffer+newEntry+"(");
+                                    else
+                                        display.setText(buffer+"×"+newEntry+"(");
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            case R.id.sin:
+                                if (buffer.isEmpty())
+                                    display.setText(newEntry+"(");
+                                else
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                        buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        display.setText(buffer+newEntry+"(");
+                                    else
+                                        display.setText(buffer+"×"+newEntry+"(");
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            case R.id.cos:
+                                if (buffer.isEmpty())
+                                    display.setText(newEntry+"(");
+                                else
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                        buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        display.setText(buffer+newEntry+"(");
+                                    else
+                                        display.setText(buffer+"×"+newEntry+"(");
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            case R.id.tan:
+                                if (buffer.isEmpty())
+                                    display.setText(newEntry+"(");
+                                else
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                        buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        display.setText(buffer+newEntry+"(");
+                                    else
+                                        display.setText(buffer+"×"+newEntry+"(");
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            case R.id.ln:
+                                if (buffer.isEmpty())
+                                    display.setText(newEntry+"(");
+                                else
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                        buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        display.setText(buffer+newEntry+"(");
+                                    else
+                                        display.setText(buffer+"×"+newEntry+"(");
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            case R.id.log2:
+                                if (buffer.isEmpty())
+                                    display.setText(newEntry+"(");
+                                else
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                        buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        display.setText(buffer+newEntry+"(");
+                                    else
+                                        display.setText(buffer+"×"+newEntry+"(");
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            case R.id.log:
+                                if (buffer.isEmpty())
+                                    display.setText(newEntry+"(");
+                                else
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                        buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        display.setText(buffer+newEntry+"(");
+                                    else
+                                        display.setText(buffer+"×"+newEntry+"(");
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            case R.id.pex:
+                                if (buffer.isEmpty())
+                                    display.setText("e^"+"(");
+                                else
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                        buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        display.setText(buffer+"e^(");
+                                    else
+                                        display.setText(buffer+"×e^(");
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            case R.id.p2x:
+                                if (buffer.isEmpty())
+                                    display.setText("2^"+"(");
+                                else
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                        buffer.endsWith("×") || buffer.endsWith("÷"))
+                                         display.setText(buffer+"2^"+"(");
+                                    else
+                                        display.setText(buffer+"×2^"+"(");
+
+                                return;
+
+                            case R.id.p10x:
+                                if (buffer.isEmpty())
+                                    display.setText("10^"+"(");
+                                else
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                        buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        display.setText(buffer+"10^"+"(");
+                                    else
+                                        display.setText(buffer+"×10^"+"(");
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            case R.id.pxy:
+                                if (buffer.isEmpty() || buffer.endsWith("(") || buffer.endsWith("+") ||
+                                        buffer.endsWith("-") || buffer.endsWith("×") || buffer.endsWith("÷")) {
+                                    setError(null);
+                                }
+                                else
+                                    display.setText(buffer+"^(");
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            // Custom functions
+
+                            case R.id.sum:
+                                if (buffer.isEmpty())
+                                    display.setText(newEntry+"(");
+                                else
+                                    display.setText(buffer+"×"+newEntry+"(");
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            case R.id.xp:
+                                if (buffer.isEmpty())
+                                    display.setText("prod"+"(");
+                                else
+                                    display.setText(buffer+"×"+"prod"+"(");
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            // Constants
+
+                            case R.id.e:
+                            case R.id.pi:
+                            case R.id.na:
+
+                                if (buffer.isEmpty())
+                                    display.setText(newEntry);
+                                else
+                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        display.setText(buffer+newEntry);
+                                    else
+                                        display.setText(buffer+"×"+newEntry);
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            // Parenthesis
+
+                            case R.id.par:
+                                if (countMatches("(",buffer)<=countMatches(")",buffer))
+                                    display.append("(");
+                                else
+                                    display.append(")");
+
+                                is_number = false;
+                                has_dot   = false;
+                                return;
+
+                            /*
+                                EQUALS
+
+                            */
+                            case R.id.equ:
+                                String inputExpr = buffer;
+
+                                inputExpr = inputExpr.replace("\\u2212","-");
+                                inputExpr = inputExpr.replace("×","*");
+                                inputExpr = inputExpr.replace("÷","/");
+                                inputExpr = inputExpr.replace("x²","^2");
+                                inputExpr = inputExpr.replace("√","sqrt");
+                                inputExpr = inputExpr.replace("log₂(  ","log2(");
+                                inputExpr = inputExpr.replace("log(","log10(");
+                                inputExpr = inputExpr.replace("ln(","log(");
+                                inputExpr = inputExpr.replace("π","pi");
+                                inputExpr = inputExpr.replace("Pi","pi");
+                                inputExpr = inputExpr.replace("PI","pi");
+                                inputExpr = inputExpr.replace("∑(","sum(");
+                                inputExpr = inputExpr.replace("NA","(6.022140857*(10^(-23)))");
+
+                                Log.d(DEBUG,inputExpr);
+
+                                // Create an Expression (A class from exp4j library)
+                                Expression expression = new ExpressionBuilder(inputExpr).build();
+                                try {
+                                    // Calculate the result and display
+                                    double result = expression.evaluate();
+                                    display.setText(Double.toString(result));
+                                } catch (Exception ex) {
+                                    // Display an error message
+                                    setError(null);
+                                }
+
+                                is_number = false;
+                                has_dot   = false;
                                 return;
 
 
                             // Dot
 
-                            case ".":
-                                if (!buffer.contains("."))
+                            case R.id.dot:
+                                if (is_number && !has_dot)
                                     display.setText(buffer + ".");
+                                is_number = true;
+                                has_dot   = true;
                                 return;
 
                             // Digits
+
+                            case R.id.d0:
+                            case R.id.d1:
+                            case R.id.d2:
+                            case R.id.d3:
+                            case R.id.d4:
+                            case R.id.d5:
+                            case R.id.d6:
+                            case R.id.d7:
+                            case R.id.d8:
+                            case R.id.d9:
+
+                                is_number = true;
 
                             default:
                                 display.setText(buffer + newEntry);
@@ -215,13 +501,34 @@ public class MainActivity extends AppCompatActivity {
             disableSoftInput((EditText) findViewById(R.id.hotDisplay));
             disableSoftInput((EditText) findViewById(R.id.resDisplay));
 
-            //getWindow().setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM, WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-
         }
 
 
 
     } // end fn
+
+    private void setError(String msg){
+        has_error = true;
+        EditText res_display = findViewById(R.id.resDisplay);
+        res_display.setText(msg.isEmpty() ? "ERROR" : msg);
+    }
+
+    private void clearMemory(){
+        // ...
+    }
+
+    private void clearEntry(){
+        has_error = false;
+        is_number = false;
+        has_dot   = false;
+        EditText res_display = findViewById(R.id.resDisplay);
+        res_display.setText("");
+    }
+
+    private void clearAll(){
+        clearEntry();
+        clearMemory();
+    }
 
 
     @Override
@@ -312,7 +619,7 @@ public class MainActivity extends AppCompatActivity {
         EditText display = findViewById(R.id.resDisplay);
 
         if (!clipboardManager.hasPrimaryClip())
-          return;
+            return;
 
         try{
             ClipData clipData=clipboardManager.getPrimaryClip();
@@ -329,9 +636,25 @@ public class MainActivity extends AppCompatActivity {
         }catch(NullPointerException e){}
 
 
-
     }
 
+    // Utiles
 
+    public static int countMatches(String findStr, String str){
+        int lastIndex = 0;
+        int count = 0;
+
+        while (lastIndex != -1) {
+
+            lastIndex = str.indexOf(findStr, lastIndex);
+
+            if (lastIndex != -1) {
+                count++;
+                lastIndex += findStr.length();
+            }
+        }
+
+        return count;
+    }
 
 }

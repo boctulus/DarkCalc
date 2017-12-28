@@ -21,8 +21,11 @@
             android:id="@+id/hotDisplay"
             android:textColor="@color/quasiWhite"
             android:textSize="24sp"
-            android:text="12 +"
-            android:paddingTop="5sp"
+            android:inputType="textNoSuggestions"
+            android:layout_marginTop="5sp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:longClickable="false"
             />
     </LinearLayout>
 
@@ -36,11 +39,12 @@
         <com.example.pc.easycalc.AutoResizeEditText
             style="@style/DisplayStyle"
             android:id="@+id/resDisplay"
-            android:textSize="60sp"
-            android:text="EASY CALC"
+            android:textSize="@dimen/resDisplay_fontSize"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:inputType="text|textNoSuggestions"
             android:gravity="top|end"
-            android:paddingBottom="5sp"
-            android:inputType="text"
+            android:paddingTop="2sp"
+            android:paddingBottom="@dimen/resDisplay_paddingBottom"
             android:textIsSelectable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
