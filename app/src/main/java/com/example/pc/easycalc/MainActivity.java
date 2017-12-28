@@ -138,29 +138,29 @@ public class MainActivity extends AppCompatActivity
                         {
                             case R.id.c:
                                 clearEntry();
-                                return;
+                                break;
 
                             case R.id.mp:
-                                return;
+                                break;
 
                             case R.id.mm:
-                                return;
+                                break;
 
                             case R.id.del:
                                 if (has_error) {
                                     clearEntry();
-                                    return;
+                                    break;
                                 }
 
                                 if (buffer.length()>0)
                                     display.setText( buffer.substring(0,buffer.length()-1) );
-                                return;
+                                break;
 
                             // Operators
 
                             case R.id.add:
                                 if (!buffer.endsWith("+"))
-                                    if (buffer.endsWith("-") || buffer.endsWith("×") ||
+                                    if (buffer.endsWith("−") || buffer.endsWith("×") ||
                                             buffer.endsWith("÷")  )
                                         display.setText( buffer.substring(0,buffer.length()-1)+"+" );
                                     else
@@ -168,56 +168,53 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.sub:
-                                if (!buffer.endsWith("\u2212"))
+                                if (!buffer.endsWith("−"))
                                     if (buffer.endsWith("+"))
-                                        display.setText( buffer.substring(0,buffer.length()-1)+"-" );
+                                        display.setText( buffer.substring(0,buffer.length()-1)+"−" );
                                     else
-                                        if (buffer.endsWith("×") || buffer.endsWith("÷"))
-                                            display.setText(buffer + "(-");
-                                         else
-                                            display.setText(buffer + "-");
+                                    if (buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        display.setText(buffer + "(−");
+                                    else
+                                        display.setText(buffer + "−");
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.mul:
                                 if (!buffer.endsWith("×"))
-                                    if (buffer.endsWith("+") || buffer.endsWith("-") || buffer.endsWith("÷") )
+                                    if (buffer.endsWith("+") || buffer.endsWith("−") || buffer.endsWith("÷") )
                                         display.setText( buffer.substring(0,buffer.length()-1)+"×" );
                                     else
                                         display.setText(buffer + newEntry);
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.div:
                                 if (!buffer.endsWith("÷"))
-                                    if (buffer.endsWith("+") || buffer.endsWith("-") || buffer.endsWith("×") )
+                                    if (buffer.endsWith("+") || buffer.endsWith("−") || buffer.endsWith("×") )
                                         display.setText( buffer.substring(0,buffer.length()-1)+"÷" );
                                     else
                                         display.setText(buffer + newEntry);
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.per:
-                                // si el operador anterior no es + o -, ignorar
-                                // si se repite, ignorar
-
-                                if (!buffer.endsWith(newEntry))
+                                if (!buffer.endsWith("%"))
                                     display.setText(buffer + newEntry);
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
-                           // Functions
+                            // Functions
 
                             case R.id.inv:
                                 if (buffer.isEmpty())
@@ -227,148 +224,148 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.sqr:
                                 if (buffer.isEmpty())
                                     display.setText(newEntry+"(");
                                 else
-                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
-                                            buffer.endsWith("×") || buffer.endsWith("÷"))
-                                        display.setText(buffer+newEntry+"(");
-                                    else
-                                        display.setText(buffer+"×"+newEntry+"(");
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
+                                        buffer.endsWith("×") || buffer.endsWith("÷"))
+                                    display.setText(buffer+newEntry+"(");
+                                else
+                                    display.setText(buffer+"×"+newEntry+"(");
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.sin:
                                 if (buffer.isEmpty())
                                     display.setText(newEntry+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
                                         buffer.endsWith("×") || buffer.endsWith("÷"))
-                                        display.setText(buffer+newEntry+"(");
-                                    else
-                                        display.setText(buffer+"×"+newEntry+"(");
+                                    display.setText(buffer+newEntry+"(");
+                                else
+                                    display.setText(buffer+"×"+newEntry+"(");
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.cos:
                                 if (buffer.isEmpty())
                                     display.setText(newEntry+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
                                         buffer.endsWith("×") || buffer.endsWith("÷"))
-                                        display.setText(buffer+newEntry+"(");
-                                    else
-                                        display.setText(buffer+"×"+newEntry+"(");
+                                    display.setText(buffer+newEntry+"(");
+                                else
+                                    display.setText(buffer+"×"+newEntry+"(");
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.tan:
                                 if (buffer.isEmpty())
                                     display.setText(newEntry+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
                                         buffer.endsWith("×") || buffer.endsWith("÷"))
-                                        display.setText(buffer+newEntry+"(");
-                                    else
-                                        display.setText(buffer+"×"+newEntry+"(");
+                                    display.setText(buffer+newEntry+"(");
+                                else
+                                    display.setText(buffer+"×"+newEntry+"(");
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.ln:
                                 if (buffer.isEmpty())
                                     display.setText(newEntry+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
                                         buffer.endsWith("×") || buffer.endsWith("÷"))
-                                        display.setText(buffer+newEntry+"(");
-                                    else
-                                        display.setText(buffer+"×"+newEntry+"(");
+                                    display.setText(buffer+newEntry+"(");
+                                else
+                                    display.setText(buffer+"×"+newEntry+"(");
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.log2:
                                 if (buffer.isEmpty())
                                     display.setText(newEntry+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
                                         buffer.endsWith("×") || buffer.endsWith("÷"))
-                                        display.setText(buffer+newEntry+"(");
-                                    else
-                                        display.setText(buffer+"×"+newEntry+"(");
+                                    display.setText(buffer+newEntry+"(");
+                                else
+                                    display.setText(buffer+"×"+newEntry+"(");
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.log:
                                 if (buffer.isEmpty())
                                     display.setText(newEntry+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
                                         buffer.endsWith("×") || buffer.endsWith("÷"))
-                                        display.setText(buffer+newEntry+"(");
-                                    else
-                                        display.setText(buffer+"×"+newEntry+"(");
+                                    display.setText(buffer+newEntry+"(");
+                                else
+                                    display.setText(buffer+"×"+newEntry+"(");
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.pex:
                                 if (buffer.isEmpty())
                                     display.setText("e^"+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
                                         buffer.endsWith("×") || buffer.endsWith("÷"))
-                                        display.setText(buffer+"e^(");
-                                    else
-                                        display.setText(buffer+"×e^(");
+                                    display.setText(buffer+"e^(");
+                                else
+                                    display.setText(buffer+"×e^(");
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.p2x:
                                 if (buffer.isEmpty())
                                     display.setText("2^"+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
                                         buffer.endsWith("×") || buffer.endsWith("÷"))
-                                         display.setText(buffer+"2^"+"(");
-                                    else
-                                        display.setText(buffer+"×2^"+"(");
+                                    display.setText(buffer+"2^"+"(");
+                                else
+                                    display.setText(buffer+"×2^"+"(");
 
-                                return;
+                                break;
 
                             case R.id.p10x:
                                 if (buffer.isEmpty())
                                     display.setText("10^"+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
                                         buffer.endsWith("×") || buffer.endsWith("÷"))
-                                        display.setText(buffer+"10^"+"(");
-                                    else
-                                        display.setText(buffer+"×10^"+"(");
+                                    display.setText(buffer+"10^"+"(");
+                                else
+                                    display.setText(buffer+"×10^"+"(");
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.pxy:
                                 if (buffer.isEmpty() || buffer.endsWith("(") || buffer.endsWith("+") ||
-                                        buffer.endsWith("-") || buffer.endsWith("×") || buffer.endsWith("÷")) {
+                                        buffer.endsWith("−") || buffer.endsWith("×") || buffer.endsWith("÷")) {
                                     setError(null);
                                 }
                                 else
@@ -376,7 +373,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             // Custom functions
 
@@ -388,7 +385,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             case R.id.xp:
                                 if (buffer.isEmpty())
@@ -398,7 +395,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             // Constants
 
@@ -409,15 +406,15 @@ public class MainActivity extends AppCompatActivity
                                 if (buffer.isEmpty())
                                     display.setText(newEntry);
                                 else
-                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("-") ||
-                                            buffer.endsWith("×") || buffer.endsWith("÷"))
-                                        display.setText(buffer+newEntry);
-                                    else
-                                        display.setText(buffer+"×"+newEntry);
+                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
+                                        buffer.endsWith("×") || buffer.endsWith("÷"))
+                                    display.setText(buffer+newEntry);
+                                else
+                                    display.setText(buffer+"×"+newEntry);
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             // Parenthesis
 
@@ -426,41 +423,41 @@ public class MainActivity extends AppCompatActivity
                                 if (buffer.isEmpty())
                                     display.append("(");
                                 else
-                                    if (buffer.endsWith("("))
-                                        display.append("(");
+                                if (buffer.endsWith("("))
+                                    display.append("(");
+                                else
+                                if (is_number) {
+                                    if (balancedParenthesis(buffer))
+                                        display.append("×(");
                                     else
-                                        if (is_number) {
-                                            if (balancedParenthesis(buffer))
-                                                display.append("×(");
-                                            else
-                                                display.append(")");
-                                        }else
-                                            if (buffer.endsWith(")"))
-                                                if (balancedParenthesis(buffer))
-                                                    display.append("×(");
-                                                else
-                                                    display.append(")");
-                                            else {
-                                                boolean fn_found = false;
-                                                for (String fn : functions) {
-                                                    if (buffer.endsWith(fn)){
-                                                        display.append("(");
-                                                        fn_found = true;
-                                                        break;
-                                                    }
-                                                }
-                                                if (!fn_found)
-                                                    if (buffer.endsWith("+") || buffer.endsWith("-") ||
-                                                            buffer.endsWith("×") || buffer.endsWith("÷"))
-                                                        display.append("(");
-                                                    else
-                                                        // asumo es una constante como 'π' o 'e'
-                                                        display.append(")");
-                                            }
+                                        display.append(")");
+                                }else
+                                if (buffer.endsWith(")"))
+                                    if (balancedParenthesis(buffer))
+                                        display.append("×(");
+                                    else
+                                        display.append(")");
+                                else {
+                                    boolean fn_found = false;
+                                    for (String fn : functions) {
+                                        if (buffer.endsWith(fn)){
+                                            display.append("(");
+                                            fn_found = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!fn_found)
+                                        if (buffer.endsWith("+") || buffer.endsWith("−") ||
+                                                buffer.endsWith("×") || buffer.endsWith("÷"))
+                                            display.append("(");
+                                        else
+                                            // asumo es una constante como 'π' o 'e'
+                                            display.append(")");
+                                }
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                break;
 
                             /*
                                 EQUALS
@@ -470,6 +467,7 @@ public class MainActivity extends AppCompatActivity
                                 String inputExpr = buffer;
 
                                 inputExpr = inputExpr.replace("\\u2212","-");
+                                inputExpr = inputExpr.replace("−","-");
                                 inputExpr = inputExpr.replace("×","*");
                                 inputExpr = inputExpr.replace("÷","/");
                                 inputExpr = inputExpr.replace("x²","^2");
@@ -498,7 +496,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
-                                return;
+                                return; // -------
 
 
                             // Dot
@@ -506,9 +504,14 @@ public class MainActivity extends AppCompatActivity
                             case R.id.dot:
                                 if (is_number && !has_dot)
                                     display.setText(buffer + ".");
+                                else
+                                    if (buffer.isEmpty() || buffer.endsWith("(") || buffer.endsWith("+") ||
+                                            buffer.endsWith("−") || buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        display.setText(buffer + "0.");
+
                                 is_number = true;
                                 has_dot   = true;
-                                return;
+                                return; // -------
 
                             // Digits
 
