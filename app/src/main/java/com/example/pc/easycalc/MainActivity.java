@@ -49,13 +49,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-         /*
+
         EditText rdisp1 = findViewById(R.id.disp1);
         savedInstanceState.putString("disp1",rdisp1.getText().toString());
 
         AutoResizeEditText rdisp2 = findViewById(R.id.disp2);
         savedInstanceState.putString("disp2",rdisp2.getText().toString());
-        */
+
+        savedInstanceState.putBoolean("has_error",has_error);
+        savedInstanceState.putBoolean("has_dot",has_dot);
+        savedInstanceState.putBoolean("is_number",is_number);
+
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -64,7 +68,7 @@ public class MainActivity extends AppCompatActivity
     public void onRestoreInstanceState(Bundle savedInstanceState) {
 
         super.onRestoreInstanceState(savedInstanceState);
-        /*
+
         String rdisp1 = savedInstanceState.getString("disp1");
         EditText disp1 = findViewById(R.id.disp1);
         disp1.setText(rdisp1);
@@ -72,7 +76,10 @@ public class MainActivity extends AppCompatActivity
         String rdisp2 = savedInstanceState.getString("disp2");
         EditText disp2 = findViewById(R.id.disp2);
         disp2.setText(rdisp2);
-     */
+
+        has_error = savedInstanceState.getBoolean("has_error");
+        has_dot = savedInstanceState.getBoolean("has_dot");
+        is_number = savedInstanceState.getBoolean("is_number");
     }
 
 
@@ -103,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         disp2_et.setFocusable(true);
         disp2_et.requestFocus();
         disp2_et.setEnableSizeCache(false);
-        //disp2_et.setMovementMethod(null);
+        disp2_et.setMovementMethod(null);
         //disp2_et.setMaxHeight(330);
         disp2_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
@@ -199,7 +206,7 @@ public class MainActivity extends AppCompatActivity
                                 if (buffer.length()>0)
                                     disp2_et.setText( buffer.substring(0,buffer.length()-1) );
 
-                                Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
+                                //Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
                                 break;
 
                             // Operators
@@ -535,7 +542,7 @@ public class MainActivity extends AppCompatActivity
                                 inputExpr = inputExpr.replace("Pi","pi");
                                 inputExpr = inputExpr.replace("PI","pi");
                                 inputExpr = inputExpr.replace("∑(","sum(");
-                                inputExpr = inputExpr.replace("NA","(6.022140857*(10^(-23)))");
+                                inputExpr = inputExpr.replace("NA","(6.022140857E-23)");
 
 
                                 Log.d(DEBUG,inputExpr);
@@ -549,7 +556,7 @@ public class MainActivity extends AppCompatActivity
                                     String strRes = Double.toString(result);
 
                                     history.add(inputExpr);
-                                    disp1_et.setText(inputExpr);
+                                    disp1_et.setText(prettyFormat(inputExpr));
                                     disp2_et.setText(strRes);
 
                                     has_dot   = (strRes.contains("."));
@@ -563,7 +570,7 @@ public class MainActivity extends AppCompatActivity
                                     setError(null);
                                 }
 
-                                return; // -------
+                                break;
 
 
                             // Dot
@@ -582,7 +589,7 @@ public class MainActivity extends AppCompatActivity
                                     }
 
                                 //Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
-                                return; // -------
+                                break;
 
                             // Digits
 
@@ -611,8 +618,7 @@ public class MainActivity extends AppCompatActivity
                                 break;
                         }
 
-
-                        //disp1_et.setText(disp2_et.getText());
+                        //
 
 
                     }
@@ -630,6 +636,17 @@ public class MainActivity extends AppCompatActivity
 
 
     } // end fn
+
+
+    private String prettyFormat(String s){
+        s = s.replace("-","−");
+        s = s.replace("*","×");
+        s = s.replace("/","÷");
+        s = s.replace("sqrt","√");
+        s = s.replace("pi","π");
+        s = s.replace("sum(","∑(");
+        return s;
+    }
 
     private boolean openedParentheses(String expr){
         return (countMatches("(",expr)>countMatches(")",expr));
