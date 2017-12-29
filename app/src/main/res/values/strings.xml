@@ -17,7 +17,7 @@
     <string name="pex">e<sup><small>x</small></sup></string>
     <string name="p10x">10<sup><small>x</small></sup></string>
     <string name="pxy">x<sup><small>y</small></sup></string>
-    <string name="inv">x<sup><small>-1</small></sup></string>
+    <string name="inv">1/x</string>
     <string name="pi">π</string>
     <string name="NA">NA</string>
     <string name="sum">∑</string>

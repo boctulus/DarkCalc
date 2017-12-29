@@ -17,15 +17,15 @@
         android:layout_weight="1.0">
 
         <EditText
-            style="@style/DisplayStyle"
             android:id="@+id/disp1"
-            android:textColor="@color/quasiWhite"
-            android:textSize="@dimen/disp1_fontSize"
-            android:inputType="textNoSuggestions"
+            style="@style/DisplayStyle"
             android:layout_marginTop="5sp"
             android:focusable="false"
             android:focusableInTouchMode="false"
+            android:inputType="textNoSuggestions"
             android:longClickable="false"
+            android:textColor="@color/quasiWhite"
+            android:textSize="@dimen/disp1_fontSize"
             />
     </LinearLayout>
 
@@ -39,8 +39,6 @@
         <com.example.pc.easycalc.AutoResizeEditText
             style="@style/DisplayStyle"
             android:id="@+id/disp2"
-            android:textSize="@dimen/disp2_fontSize"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:inputType="text|textNoSuggestions"
             android:gravity="top|end"
             android:paddingTop="2sp"
@@ -48,6 +46,7 @@
             android:textIsSelectable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:textSize="@dimen/disp2_fontSize"
             />
 
 

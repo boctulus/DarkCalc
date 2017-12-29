@@ -85,9 +85,11 @@ public class MainActivity extends AppCompatActivity
         hideBar();
 
         // Reserved keywords
-        String[] constantStr_lst = new String[]{"Pi","PI","π","e","NA"};
+        String[] constant_lst = new String[]{"Pi","PI","π","e","NA"};
         String[] function_lst    = new String[]{"sin","cos","tan","arcsin","arccos","arctan", "sinh","cosh","tanh","arcsinh","arccosh","arcanh","sum","prod","ln","log","log2","log10"};
+
         final List<String> functions = Arrays.asList(function_lst);
+        final List<String> constants = Arrays.asList(constant_lst);
 
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
@@ -104,7 +106,6 @@ public class MainActivity extends AppCompatActivity
         //disp2_et.setMovementMethod(null);
         //disp2_et.setMaxHeight(330);
         disp2_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-
 
         // Register the context menu to the the EditText
         registerForContextMenu(disp2_et);
@@ -343,13 +344,13 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.log2:
                                 if (buffer.isEmpty())
-                                    disp2_et.setText(newEntry+"(");
+                                    disp2_et.setText("log2"+"(");
                                 else
                                     if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
                                             buffer.endsWith("×") || buffer.endsWith("÷"))
-                                        disp2_et.setText(buffer+newEntry+"(");
+                                        disp2_et.setText(buffer+"log2"+"(");
                                     else
-                                        disp2_et.setText(buffer+"×"+newEntry+"(");
+                                        disp2_et.setText(buffer+"×"+"log2"+"(");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -510,6 +511,15 @@ public class MainActivity extends AppCompatActivity
 
                             */
                             case R.id.equ:
+                                int diff = countMatches("(",buffer)-countMatches(")",buffer);
+
+                                if (diff>0) {
+                                    for (int i = 0; i < diff; i++)
+                                        disp2_et.append(")");
+
+                                    buffer = disp2_et.getText().toString();
+                                }
+
                                 String inputExpr = buffer;
 
                                 inputExpr = inputExpr.replace("\\u2212","-");
@@ -527,11 +537,13 @@ public class MainActivity extends AppCompatActivity
                                 inputExpr = inputExpr.replace("∑(","sum(");
                                 inputExpr = inputExpr.replace("NA","(6.022140857*(10^(-23)))");
 
-                                //Log.d(DEBUG,inputExpr);
 
-                                // Create an Expression (A class from exp4j library)
-                                Expression expression = new ExpressionBuilder(inputExpr).build();
+                                Log.d(DEBUG,inputExpr);
+
                                 try {
+                                    // Create an Expression (A class from exp4j library)
+                                    Expression expression = new ExpressionBuilder(inputExpr).build();
+
                                     // Calculate the result and display
                                     double result = expression.evaluate();
                                     String strRes = Double.toString(result);
@@ -544,7 +556,7 @@ public class MainActivity extends AppCompatActivity
                                     is_number = (strRes!="NaN");
                                     has_error = (strRes=="NaN");
 
-                                    Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
+                                    //Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
 
                                 } catch (Exception ex) {
                                     // Display an error message
@@ -569,7 +581,7 @@ public class MainActivity extends AppCompatActivity
                                         is_number = true;
                                     }
 
-                                Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
+                                //Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
                                 return; // -------
 
                             // Digits
@@ -585,10 +597,17 @@ public class MainActivity extends AppCompatActivity
                             case R.id.d8:
                             case R.id.d9:
 
+                                for (String cte : constants) {
+                                    if (buffer.endsWith(cte)){
+                                        disp2_et.append("×");
+                                        break;
+                                    }
+                                }
+
                                 is_number = true;
 
                             default:
-                                disp2_et.setText(buffer + newEntry);
+                                disp2_et.append(newEntry);
                                 break;
                         }
 
@@ -631,7 +650,11 @@ public class MainActivity extends AppCompatActivity
     private void setError(String msg){
         has_error = true;
         EditText disp2_et = findViewById(R.id.disp2);
-        disp2_et.setText(msg.isEmpty() ? "ERROR" : msg);
+        disp2_et.setText(msg);
+    }
+
+    private void setError(){
+        setError("ERROR");
     }
 
     private void clearMemory(){
