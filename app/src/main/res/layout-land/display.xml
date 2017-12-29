@@ -13,7 +13,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/disp1Container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="3.0">
 
         <EditText
@@ -22,7 +22,6 @@
             android:textColor="@color/quasiWhite"
             android:textSize="@dimen/disp1_fontSize"
             android:inputType="textNoSuggestions"
-            android:paddingTop="5sp"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:longClickable="false"
@@ -33,7 +32,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/disp2Container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="3.0">
 
         <com.example.pc.easycalc.AutoResizeEditText
