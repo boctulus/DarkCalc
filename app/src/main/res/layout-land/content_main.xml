@@ -67,12 +67,11 @@
             />
 
         <Button
-            android:text="DEL"
-            style="@style/ButtonStyle"
-            android:textColor="@color/white"
-            android:background="@drawable/custom_button_black"
             android:id="@+id/del"
-            />
+            style="@style/ButtonStyle"
+            android:background="@drawable/custom_button_black"
+            android:text="@string/backspace"
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -115,12 +114,11 @@
             />
 
         <Button
-            android:text="1/x"
-            style="@style/ButtonStyle"
-            android:textColor="@color/white"
-            android:background="@drawable/custom_button_purple"
             android:id="@+id/inv"
-            />
+            style="@style/ButtonStyle"
+            android:background="@drawable/custom_button_purple"
+            android:text="@string/inv"
+            android:textColor="@color/white" />
 
         <Button
             android:text="@string/sqr"

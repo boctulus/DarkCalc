@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="DisplayContainer"
+    android:id="@+id/display"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_weight="1.0"
     android:background="@color/grey3"
-    android:id="@+id/display"
     >
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/hotDisplayContainer"
+        android:id="@+id/disp1Container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="3.0">
 
-        <com.example.pc.easycalc.AutoResizeEditText
+        <EditText
             style="@style/DisplayStyle"
-            android:id="@+id/hotDisplay"
+            android:id="@+id/disp1"
             android:textColor="@color/quasiWhite"
-            android:textSize="24sp"
+            android:textSize="@dimen/disp1_fontSize"
             android:inputType="textNoSuggestions"
             android:paddingTop="5sp"
             android:focusable="false"
@@ -31,19 +31,19 @@
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/resDisplayContainer"
+        android:id="@+id/disp2Container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="3.0">
 
         <com.example.pc.easycalc.AutoResizeEditText
             style="@style/DisplayStyle"
-            android:id="@+id/resDisplay"
-            android:textSize="@dimen/resDisplay_fontSize"
+            android:id="@+id/disp2"
+            android:textSize="@dimen/disp2_fontSize"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:inputType="text|textNoSuggestions"
             android:gravity="top|end"
-            android:paddingBottom="@dimen/resDisplay_paddingBottom"
+            android:paddingBottom="@dimen/disp2_paddingBottom"
             android:textIsSelectable="true"
             android:focusable="true"
             android:focusableInTouchMode="true"

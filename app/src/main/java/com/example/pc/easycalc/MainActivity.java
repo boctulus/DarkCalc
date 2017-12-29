@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity
     private boolean has_error = false;
     private boolean is_number = false;
     private boolean has_dot   = false;
+
+    List<String> history = new ArrayList<>();
 
     private  ClipboardManager clipboardManager;
 
@@ -43,6 +46,35 @@ public class MainActivity extends AppCompatActivity
 
         getSupportActionBar().hide();
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+         /*
+        EditText rdisp1 = findViewById(R.id.disp1);
+        savedInstanceState.putString("disp1",rdisp1.getText().toString());
+
+        AutoResizeEditText rdisp2 = findViewById(R.id.disp2);
+        savedInstanceState.putString("disp2",rdisp2.getText().toString());
+        */
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
+        /*
+        String rdisp1 = savedInstanceState.getString("disp1");
+        EditText disp1 = findViewById(R.id.disp1);
+        disp1.setText(rdisp1);
+
+        String rdisp2 = savedInstanceState.getString("disp2");
+        EditText disp2 = findViewById(R.id.disp2);
+        disp2.setText(rdisp2);
+     */
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -60,7 +92,24 @@ public class MainActivity extends AppCompatActivity
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
 
-        /* Evito colapsen los displays */
+        final EditText disp1_et = findViewById(R.id.disp1);
+        disp1_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+        final AutoResizeEditText disp2_et = findViewById(R.id.disp2);
+        disp2_et.setEnabled(true);
+        disp2_et.setFocusableInTouchMode(true);
+        disp2_et.setFocusable(true);
+        disp2_et.requestFocus();
+        disp2_et.setEnableSizeCache(false);
+        //disp2_et.setMovementMethod(null);
+        //disp2_et.setMaxHeight(330);
+        disp2_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+
+        // Register the context menu to the the EditText
+        registerForContextMenu(disp2_et);
+
+            /* Evito colapsen los displays */
 
         final LinearLayout display = findViewById(R.id.display);
 
@@ -70,49 +119,40 @@ public class MainActivity extends AppCompatActivity
 
                 /* Toca apagar el listener para evitar se llame cada vez */
                 display.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
                 display.setMinimumHeight(display.getHeight());
             }
         });
 
-        final LinearLayout hot_display_cont = findViewById(R.id.hotDisplayContainer);
+        final LinearLayout disp1_cont = findViewById(R.id.disp1Container);
 
-        hot_display_cont.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        disp1_cont.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
 
                 /* Toca apagar el listener para evitar se llame cada vez */
-                hot_display_cont.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                hot_display_cont.setMinimumHeight(hot_display_cont.getHeight());
+                disp1_cont.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                disp1_cont.setMinimumHeight(disp1_cont.getHeight());
             }
         });
 
+        final LinearLayout disp2_cont = findViewById(R.id.disp2Container);
 
-        AutoResizeEditText res_display = findViewById(R.id.resDisplay);
-        res_display.setEnabled(true);
-        res_display.setFocusableInTouchMode(true);
-        res_display.setFocusable(true);
-        res_display.requestFocus();
-        res_display.setEnableSizeCache(false);
-        //res_display.setMovementMethod(null);
-        //res_display.setMaxHeight(330);
-        //res_display.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        disp1_cont.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
 
-        //if (res_display.getText().toString() == "EASY CALC")
-        //   res_display.setText("");
-
-
-        // Register the context menu to the the EditText
-        registerForContextMenu(res_display);
-
+                /* Toca apagar el listener para evitar se llame cada vez */
+                disp2_cont.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                disp2_cont.setMinimumHeight(disp2_cont.getHeight());
+            }
+        });
 
         LinearLayout root = (LinearLayout) findViewById(R.id.root);
 
         for (int rix = 0; rix< root.getChildCount(); rix++){
             final View elem = (View) root.getChildAt(rix);
 
-            // no es un contenedor
+            // no contiene botones
             if (elem.getId() == R.id.display)
                 continue;
 
@@ -121,16 +161,14 @@ public class MainActivity extends AppCompatActivity
             int childCount = row.getChildCount();
             for (int i= 0; i < childCount; i++){
                 Button boton = (Button) row.getChildAt(i);
-                //boton.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0xFFAA0000));
 
                 boton.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){
-                        EditText display = findViewById(R.id.resDisplay);
                         Button b = (Button) v;
 
                         int id = b.getId();
                         String newEntry = b.getText().toString();
-                        String buffer = display.getText().toString();
+                        String buffer = disp2_et.getText().toString();
 
                         //Log.d(DEBUG,newEntry+" ("+id+")");
 
@@ -147,13 +185,20 @@ public class MainActivity extends AppCompatActivity
                                 break;
 
                             case R.id.del:
+                                disp1_et.setText("");
+
                                 if (has_error) {
                                     clearEntry();
                                     break;
                                 }
 
+                                if (buffer.endsWith("."))
+                                    has_dot = false;
+
                                 if (buffer.length()>0)
-                                    display.setText( buffer.substring(0,buffer.length()-1) );
+                                    disp2_et.setText( buffer.substring(0,buffer.length()-1) );
+
+                                Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
                                 break;
 
                             // Operators
@@ -162,9 +207,9 @@ public class MainActivity extends AppCompatActivity
                                 if (!buffer.endsWith("+"))
                                     if (buffer.endsWith("−") || buffer.endsWith("×") ||
                                             buffer.endsWith("÷")  )
-                                        display.setText( buffer.substring(0,buffer.length()-1)+"+" );
+                                        disp2_et.setText( buffer.substring(0,buffer.length()-1)+"+" );
                                     else
-                                        display.setText(buffer + newEntry);
+                                        disp2_et.setText(buffer + newEntry);
 
                                 is_number = false;
                                 has_dot   = false;
@@ -173,12 +218,12 @@ public class MainActivity extends AppCompatActivity
                             case R.id.sub:
                                 if (!buffer.endsWith("−"))
                                     if (buffer.endsWith("+"))
-                                        display.setText( buffer.substring(0,buffer.length()-1)+"−" );
+                                        disp2_et.setText( buffer.substring(0,buffer.length()-1)+"−" );
                                     else
                                     if (buffer.endsWith("×") || buffer.endsWith("÷"))
-                                        display.setText(buffer + "(−");
+                                        disp2_et.setText(buffer + "(−");
                                     else
-                                        display.setText(buffer + "−");
+                                        disp2_et.setText(buffer + "−");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -187,9 +232,9 @@ public class MainActivity extends AppCompatActivity
                             case R.id.mul:
                                 if (!buffer.endsWith("×"))
                                     if (buffer.endsWith("+") || buffer.endsWith("−") || buffer.endsWith("÷") )
-                                        display.setText( buffer.substring(0,buffer.length()-1)+"×" );
+                                        disp2_et.setText( buffer.substring(0,buffer.length()-1)+"×" );
                                     else
-                                        display.setText(buffer + newEntry);
+                                        disp2_et.setText(buffer + newEntry);
 
                                 is_number = false;
                                 has_dot   = false;
@@ -198,9 +243,9 @@ public class MainActivity extends AppCompatActivity
                             case R.id.div:
                                 if (!buffer.endsWith("÷"))
                                     if (buffer.endsWith("+") || buffer.endsWith("−") || buffer.endsWith("×") )
-                                        display.setText( buffer.substring(0,buffer.length()-1)+"÷" );
+                                        disp2_et.setText( buffer.substring(0,buffer.length()-1)+"÷" );
                                     else
-                                        display.setText(buffer + newEntry);
+                                        disp2_et.setText(buffer + newEntry);
 
                                 is_number = false;
                                 has_dot   = false;
@@ -208,7 +253,7 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.per:
                                 if (!buffer.endsWith("%"))
-                                    display.setText(buffer + newEntry);
+                                    disp2_et.setText(buffer + newEntry);
 
                                 is_number = false;
                                 has_dot   = false;
@@ -218,9 +263,9 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.inv:
                                 if (buffer.isEmpty())
-                                    display.setText("1/(");
+                                    disp2_et.setText("1÷(");
                                 else
-                                    display.setText("1÷("+buffer+")");
+                                    disp2_et.setText("1÷("+buffer+")");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -228,13 +273,13 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.sqr:
                                 if (buffer.isEmpty())
-                                    display.setText(newEntry+"(");
+                                    disp2_et.setText(newEntry+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
-                                        buffer.endsWith("×") || buffer.endsWith("÷"))
-                                    display.setText(buffer+newEntry+"(");
-                                else
-                                    display.setText(buffer+"×"+newEntry+"(");
+                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
+                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        disp2_et.setText(buffer+newEntry+"(");
+                                    else
+                                        disp2_et.setText(buffer+"×"+newEntry+"(");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -242,26 +287,27 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.sin:
                                 if (buffer.isEmpty())
-                                    display.setText(newEntry+"(");
+                                    disp2_et.setText(newEntry+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
-                                        buffer.endsWith("×") || buffer.endsWith("÷"))
-                                    display.setText(buffer+newEntry+"(");
-                                else
-                                    display.setText(buffer+"×"+newEntry+"(");
+                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
+                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        disp2_et.setText(buffer+newEntry+"(");
+                                    else
+                                        disp2_et.setText(buffer+"×"+newEntry+"(");
+
                                 is_number = false;
                                 has_dot   = false;
                                 break;
 
                             case R.id.cos:
                                 if (buffer.isEmpty())
-                                    display.setText(newEntry+"(");
+                                    disp2_et.setText(newEntry+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
-                                        buffer.endsWith("×") || buffer.endsWith("÷"))
-                                    display.setText(buffer+newEntry+"(");
-                                else
-                                    display.setText(buffer+"×"+newEntry+"(");
+                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
+                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        disp2_et.setText(buffer+newEntry+"(");
+                                    else
+                                        disp2_et.setText(buffer+"×"+newEntry+"(");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -269,13 +315,13 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.tan:
                                 if (buffer.isEmpty())
-                                    display.setText(newEntry+"(");
+                                    disp2_et.setText(newEntry+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
-                                        buffer.endsWith("×") || buffer.endsWith("÷"))
-                                    display.setText(buffer+newEntry+"(");
-                                else
-                                    display.setText(buffer+"×"+newEntry+"(");
+                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
+                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        disp2_et.setText(buffer+newEntry+"(");
+                                    else
+                                        disp2_et.setText(buffer+"×"+newEntry+"(");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -283,13 +329,13 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.ln:
                                 if (buffer.isEmpty())
-                                    display.setText(newEntry+"(");
+                                    disp2_et.setText(newEntry+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
-                                        buffer.endsWith("×") || buffer.endsWith("÷"))
-                                    display.setText(buffer+newEntry+"(");
-                                else
-                                    display.setText(buffer+"×"+newEntry+"(");
+                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
+                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        disp2_et.setText(buffer+newEntry+"(");
+                                    else
+                                        disp2_et.setText(buffer+"×"+newEntry+"(");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -297,13 +343,13 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.log2:
                                 if (buffer.isEmpty())
-                                    display.setText(newEntry+"(");
+                                    disp2_et.setText(newEntry+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
-                                        buffer.endsWith("×") || buffer.endsWith("÷"))
-                                    display.setText(buffer+newEntry+"(");
-                                else
-                                    display.setText(buffer+"×"+newEntry+"(");
+                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
+                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        disp2_et.setText(buffer+newEntry+"(");
+                                    else
+                                        disp2_et.setText(buffer+"×"+newEntry+"(");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -311,13 +357,13 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.log:
                                 if (buffer.isEmpty())
-                                    display.setText(newEntry+"(");
+                                    disp2_et.setText(newEntry+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
-                                        buffer.endsWith("×") || buffer.endsWith("÷"))
-                                    display.setText(buffer+newEntry+"(");
-                                else
-                                    display.setText(buffer+"×"+newEntry+"(");
+                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
+                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        disp2_et.setText(buffer+newEntry+"(");
+                                    else
+                                        disp2_et.setText(buffer+"×"+newEntry+"(");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -325,13 +371,13 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.pex:
                                 if (buffer.isEmpty())
-                                    display.setText("e^"+"(");
+                                    disp2_et.setText("e^"+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
-                                        buffer.endsWith("×") || buffer.endsWith("÷"))
-                                    display.setText(buffer+"e^(");
-                                else
-                                    display.setText(buffer+"×e^(");
+                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
+                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        disp2_et.setText(buffer+"e^(");
+                                    else
+                                        disp2_et.setText(buffer+"×e^(");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -339,25 +385,25 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.p2x:
                                 if (buffer.isEmpty())
-                                    display.setText("2^"+"(");
+                                    disp2_et.setText("2^"+"(");
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
-                                        buffer.endsWith("×") || buffer.endsWith("÷"))
-                                    display.setText(buffer+"2^"+"(");
-                                else
-                                    display.setText(buffer+"×2^"+"(");
+                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
+                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        disp2_et.setText(buffer+"2^"+"(");
+                                    else
+                                        disp2_et.setText(buffer+"×2^"+"(");
 
                                 break;
 
                             case R.id.p10x:
                                 if (buffer.isEmpty())
-                                    display.setText("10^"+"(");
+                                    disp2_et.setText("10^"+"(");
                                 else
                                 if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
                                         buffer.endsWith("×") || buffer.endsWith("÷"))
-                                    display.setText(buffer+"10^"+"(");
+                                    disp2_et.setText(buffer+"10^"+"(");
                                 else
-                                    display.setText(buffer+"×10^"+"(");
+                                    disp2_et.setText(buffer+"×10^"+"(");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -369,7 +415,7 @@ public class MainActivity extends AppCompatActivity
                                     setError(null);
                                 }
                                 else
-                                    display.setText(buffer+"^(");
+                                    disp2_et.setText(buffer+"^(");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -379,9 +425,9 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.sum:
                                 if (buffer.isEmpty())
-                                    display.setText(newEntry+"(");
+                                    disp2_et.setText(newEntry+"(");
                                 else
-                                    display.setText(buffer+"×"+newEntry+"(");
+                                    disp2_et.setText(buffer+"×"+newEntry+"(");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -389,9 +435,9 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.xp:
                                 if (buffer.isEmpty())
-                                    display.setText("prod"+"(");
+                                    disp2_et.setText("prod"+"(");
                                 else
-                                    display.setText(buffer+"×"+"prod"+"(");
+                                    disp2_et.setText(buffer+"×"+"prod"+"(");
 
                                 is_number = false;
                                 has_dot   = false;
@@ -404,56 +450,56 @@ public class MainActivity extends AppCompatActivity
                             case R.id.na:
 
                                 if (buffer.isEmpty())
-                                    display.setText(newEntry);
+                                    disp2_et.setText(newEntry);
                                 else
-                                if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
-                                        buffer.endsWith("×") || buffer.endsWith("÷"))
-                                    display.setText(buffer+newEntry);
-                                else
-                                    display.setText(buffer+"×"+newEntry);
+                                    if (buffer.endsWith("(") || buffer.endsWith("+") || buffer.endsWith("−") ||
+                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                        disp2_et.setText(buffer+newEntry);
+                                    else
+                                        disp2_et.setText(buffer+"×"+newEntry);
 
                                 is_number = false;
                                 has_dot   = false;
                                 break;
 
-                            // Parenthesis
+                            // Parentheses
 
                             case R.id.par:
 
                                 if (buffer.isEmpty())
-                                    display.append("(");
+                                    disp2_et.append("(");
                                 else
-                                if (buffer.endsWith("("))
-                                    display.append("(");
-                                else
-                                if (is_number) {
-                                    if (balancedParenthesis(buffer))
-                                        display.append("×(");
+                                    if (buffer.endsWith("("))
+                                        disp2_et.append("(");
                                     else
-                                        display.append(")");
-                                }else
-                                if (buffer.endsWith(")"))
-                                    if (balancedParenthesis(buffer))
-                                        display.append("×(");
-                                    else
-                                        display.append(")");
-                                else {
-                                    boolean fn_found = false;
-                                    for (String fn : functions) {
-                                        if (buffer.endsWith(fn)){
-                                            display.append("(");
-                                            fn_found = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!fn_found)
-                                        if (buffer.endsWith("+") || buffer.endsWith("−") ||
-                                                buffer.endsWith("×") || buffer.endsWith("÷"))
-                                            display.append("(");
-                                        else
-                                            // asumo es una constante como 'π' o 'e'
-                                            display.append(")");
-                                }
+                                        if (is_number) {
+                                            if (balancedParentheses(buffer))
+                                                disp2_et.append("×(");
+                                            else
+                                                disp2_et.append(")");
+                                        }else
+                                            if (buffer.endsWith(")"))
+                                                if (balancedParentheses(buffer))
+                                                    disp2_et.append("×(");
+                                                else
+                                                    disp2_et.append(")");
+                                            else {
+                                                boolean fn_found = false;
+                                                for (String fn : functions) {
+                                                    if (buffer.endsWith(fn)){
+                                                        disp2_et.append("(");
+                                                        fn_found = true;
+                                                        break;
+                                                    }
+                                                }
+                                                if (!fn_found)
+                                                    if (buffer.endsWith("+") || buffer.endsWith("−") ||
+                                                            buffer.endsWith("×") || buffer.endsWith("÷"))
+                                                        disp2_et.append("(");
+                                                    else
+                                                        // asumo es una constante como 'π' o 'e'
+                                                        disp2_et.append(")");
+                                            }
 
                                 is_number = false;
                                 has_dot   = false;
@@ -481,36 +527,49 @@ public class MainActivity extends AppCompatActivity
                                 inputExpr = inputExpr.replace("∑(","sum(");
                                 inputExpr = inputExpr.replace("NA","(6.022140857*(10^(-23)))");
 
-                                Log.d(DEBUG,inputExpr);
+                                //Log.d(DEBUG,inputExpr);
 
                                 // Create an Expression (A class from exp4j library)
                                 Expression expression = new ExpressionBuilder(inputExpr).build();
                                 try {
                                     // Calculate the result and display
                                     double result = expression.evaluate();
-                                    display.setText(Double.toString(result));
+                                    String strRes = Double.toString(result);
+
+                                    history.add(inputExpr);
+                                    disp1_et.setText(inputExpr);
+                                    disp2_et.setText(strRes);
+
+                                    has_dot   = (strRes.contains("."));
+                                    is_number = (strRes!="NaN");
+                                    has_error = (strRes=="NaN");
+
+                                    Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
+
                                 } catch (Exception ex) {
                                     // Display an error message
                                     setError(null);
                                 }
 
-                                is_number = false;
-                                has_dot   = false;
                                 return; // -------
 
 
                             // Dot
 
                             case R.id.dot:
-                                if (is_number && !has_dot)
-                                    display.setText(buffer + ".");
-                                else
+                                if (is_number && !has_dot) {
+                                    disp2_et.setText(buffer + ".");
+                                    has_dot   = true;
+                                    is_number = true;
+                                }else
                                     if (buffer.isEmpty() || buffer.endsWith("(") || buffer.endsWith("+") ||
-                                            buffer.endsWith("−") || buffer.endsWith("×") || buffer.endsWith("÷"))
-                                        display.setText(buffer + "0.");
+                                            buffer.endsWith("−") || buffer.endsWith("×") || buffer.endsWith("÷")) {
+                                        disp2_et.setText(buffer + "0.");
+                                        has_dot   = true;
+                                        is_number = true;
+                                    }
 
-                                is_number = true;
-                                has_dot   = true;
+                                Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
                                 return; // -------
 
                             // Digits
@@ -529,22 +588,23 @@ public class MainActivity extends AppCompatActivity
                                 is_number = true;
 
                             default:
-                                display.setText(buffer + newEntry);
+                                disp2_et.setText(buffer + newEntry);
                                 break;
                         }
 
 
-                        //Log.d("DEBUG", b.getText().toString());
+                        //disp1_et.setText(disp2_et.getText());
 
 
                     }
                 });
 
+
             }
 
 
-            disableSoftInput((EditText) findViewById(R.id.hotDisplay));
-            disableSoftInput((EditText) findViewById(R.id.resDisplay));
+            disableSoftInput((EditText) findViewById(R.id.disp1));
+            disableSoftInput((EditText) findViewById(R.id.disp2));
 
         }
 
@@ -552,22 +612,26 @@ public class MainActivity extends AppCompatActivity
 
     } // end fn
 
-    private boolean openedParenthesis(String expr){
-        return (!expr.isEmpty() && (countMatches("(",expr)>countMatches(")",expr)));
+    private boolean openedParentheses(String expr){
+        return (countMatches("(",expr)>countMatches(")",expr));
     }
 
-    private boolean closedParenthesis(String expr){
-        return (!expr.isEmpty() && (countMatches("(",expr)<countMatches(")",expr)));
+    private boolean closedParentheses(String expr){
+        return (countMatches("(",expr)<countMatches(")",expr));
     }
 
-    private boolean balancedParenthesis(String expr){
-        return (!expr.isEmpty() && (countMatches("(",expr)==countMatches(")",expr)));
+    private boolean balancedParentheses(String expr){
+        return (countMatches("(",expr)==countMatches(")",expr));
+    }
+
+    private boolean noneParentheses(String expr){
+        return ((countMatches("(",expr)==0 && countMatches(")",expr)==0));
     }
 
     private void setError(String msg){
         has_error = true;
-        EditText res_display = findViewById(R.id.resDisplay);
-        res_display.setText(msg.isEmpty() ? "ERROR" : msg);
+        EditText disp2_et = findViewById(R.id.disp2);
+        disp2_et.setText(msg.isEmpty() ? "ERROR" : msg);
     }
 
     private void clearMemory(){
@@ -578,8 +642,12 @@ public class MainActivity extends AppCompatActivity
         has_error = false;
         is_number = false;
         has_dot   = false;
-        EditText res_display = findViewById(R.id.resDisplay);
-        res_display.setText("");
+
+        EditText disp1_et = findViewById(R.id.disp1);
+        disp1_et.setText("");
+
+        EditText disp2_et = findViewById(R.id.disp2);
+        disp2_et.setText("");
     }
 
     private void clearAll(){
@@ -588,27 +656,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-
-        //AutoResizeEditText display = findViewById(R.id.resDisplay);
-        //savedInstanceState.putString("res",display.getText().toString());
-        // etc.
-
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-
-        super.onRestoreInstanceState(savedInstanceState);
-
-        //String res = savedInstanceState.getString("res");
-        //AutoResizeEditText display = findViewById(R.id.resDisplay);
-        //display.setText(res);
-
-    }
 
 
     /**
@@ -664,7 +711,7 @@ public class MainActivity extends AppCompatActivity
     /* Clipboard */
 
     public void copyText(){
-        EditText display = findViewById(R.id.resDisplay);
+        EditText display = findViewById(R.id.disp2);
 
         //save data to clipboard
         ClipData clipData = ClipData.newPlainText("RESULTADO", display.getText().toString());
@@ -673,7 +720,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void pasteText(){
-        EditText display = findViewById(R.id.resDisplay);
+        EditText display = findViewById(R.id.disp2);
 
         if (!clipboardManager.hasPrimaryClip())
             return;

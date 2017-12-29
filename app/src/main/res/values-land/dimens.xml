@@ -1,7 +1,8 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="resDisplay_fontSize">60sp</dimen>
-    <dimen name="resDisplay_paddingBottom">4sp</dimen>
-    <dimen name="button_fontSize">22sp</dimen>
+    <dimen name="disp1_fontSize">20sp</dimen>
+    <dimen name="disp2_fontSize">60sp</dimen>
+    <dimen name="disp2_paddingBottom">4sp</dimen>
+    <dimen name="button_fontSize">20sp</dimen>
     <dimen name="button_paddingBottom">2sp</dimen>
 </resources>
