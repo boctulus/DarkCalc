@@ -23,9 +23,11 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:inputType="textNoSuggestions"
+            android:gravity="top|start"
             android:longClickable="false"
             android:textColor="@color/quasiWhite"
             android:textSize="@dimen/disp1_fontSize"
+            android:paddingTop="2dp"
             />
     </LinearLayout>
 
@@ -41,7 +43,6 @@
             android:id="@+id/disp2"
             android:inputType="text|textNoSuggestions"
             android:gravity="top|end"
-            android:paddingTop="2sp"
             android:paddingBottom="@dimen/disp2_paddingBottom"
             android:textIsSelectable="true"
             android:focusable="true"

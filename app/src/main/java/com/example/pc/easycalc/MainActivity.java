@@ -20,9 +20,14 @@ import android.widget.LinearLayout;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity
@@ -102,15 +107,18 @@ public class MainActivity extends AppCompatActivity
 
 
         final EditText disp1_et = findViewById(R.id.disp1);
+        disp1_et.setMovementMethod(null);
+        disp1_et.setFocusable(false);
+        disp1_et.setCursorVisible(false);
         disp1_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
         final AutoResizeEditText disp2_et = findViewById(R.id.disp2);
         disp2_et.setEnabled(true);
         disp2_et.setFocusableInTouchMode(true);
         disp2_et.setFocusable(true);
-        disp2_et.requestFocus();
+        //disp2_et.requestFocus();
         disp2_et.setEnableSizeCache(false);
-        disp2_et.setMovementMethod(null);
+        //disp2_et.setMovementMethod(null);
         //disp2_et.setMaxHeight(330);
         disp2_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
@@ -557,7 +565,7 @@ public class MainActivity extends AppCompatActivity
 
                                     history.add(inputExpr);
                                     disp1_et.setText(prettyFormat(inputExpr));
-                                    disp2_et.setText(strRes);
+                                    disp2_et.setText(formatCurrency(strRes));
 
                                     has_dot   = (strRes.contains("."));
                                     is_number = (strRes!="NaN");
@@ -736,15 +744,12 @@ public class MainActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.contextmenu, menu);
 
-
         MenuItem paste_action = menu.findItem(R.id.itempaste);
         if (!(clipboardManager.hasPrimaryClip())) {
             paste_action.setEnabled(false);
         }else{
             paste_action.setEnabled(true);
         }
-
-
     }
 
 
@@ -799,6 +804,19 @@ public class MainActivity extends AppCompatActivity
         }
 
         return count;
+    }
+
+    public static String formatCurrency(String string) {
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+
+        symbols.setGroupingSeparator(',');
+        symbols.setDecimalSeparator('.');
+        formatter.setDecimalFormatSymbols(symbols);
+        //formatter.setMinimumFractionDigits(10);
+        formatter.setMaximumFractionDigits(8);
+        formatter.setRoundingMode(RoundingMode.HALF_UP);
+        return formatter.format(Double.parseDouble(string));
     }
 
 }

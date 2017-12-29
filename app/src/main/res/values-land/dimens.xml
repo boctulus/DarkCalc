@@ -1,8 +1,8 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="disp1_fontSize">20dp</dimen>
-    <dimen name="disp2_fontSize">60dp</dimen>
-    <dimen name="disp2_paddingBottom">4sp</dimen>
-    <dimen name="button_fontSize">20sp</dimen>
-    <dimen name="button_paddingBottom">2sp</dimen>
+    <dimen name="disp1_fontSize">30dp</dimen>
+    <dimen name="disp2_fontSize">90dp</dimen>
+    <dimen name="disp2_paddingBottom">4dp</dimen>
+    <dimen name="button_fontSize">20dp</dimen>
+    <dimen name="button_paddingBottom">2dp</dimen>
 </resources>
