@@ -291,6 +291,7 @@ public class AutoResizeEditText extends android.support.v7.widget.AppCompatEditT
         return false;
     }
 
+    /*
     @Override
     public void onSelectionChanged(int start, int end) {
 
@@ -304,6 +305,6 @@ public class AutoResizeEditText extends android.support.v7.widget.AppCompatEditT
 
         super.onSelectionChanged(start, end);
     }
-
+*/
 
 }

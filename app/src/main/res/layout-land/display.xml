@@ -19,14 +19,12 @@
         <com.example.pc.easycalc.FormulaTextEdit
             android:id="@+id/disp1"
             style="@style/DisplayStyle"
-            android:inputType="text|textNoSuggestions"
             android:textColor="@color/quasiWhite"
             android:gravity="top|start"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:longClickable="false"
             android:textSize="@dimen/disp1_fontSize"
             android:paddingTop="2dp"
+
+            android:inputType="text|textNoSuggestions"
             />
     </LinearLayout>
 
@@ -40,13 +38,14 @@
         <com.example.pc.easycalc.AutoResizeEditText
             style="@style/DisplayStyle"
             android:id="@+id/disp2"
-            android:inputType="text|textNoSuggestions"
             android:gravity="top|end"
             android:paddingBottom="@dimen/disp2_paddingBottom"
-            android:textIsSelectable="true"
+            android:textSize="@dimen/disp2_fontSize"
+
+            android:inputType="text|textNoSuggestions"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:textSize="@dimen/disp2_fontSize"
+            android:textIsSelectable="true"
             />
 
     </LinearLayout>
