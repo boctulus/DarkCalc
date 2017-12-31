@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_weight="1.0"
+    android:layout_weight="0.5"
     android:background="@color/grey3"
     >
 
@@ -16,11 +16,11 @@
         android:layout_height="match_parent"
         android:layout_weight="5.0">
 
-        <EditText
-            style="@style/DisplayStyle"
+        <com.example.pc.easycalc.FormulaTextEdit
             android:id="@+id/disp1"
+            style="@style/DisplayStyle"
+            android:inputType="text|textNoSuggestions"
             android:textColor="@color/quasiWhite"
-            android:inputType="textNoSuggestions"
             android:gravity="top|start"
             android:focusable="false"
             android:focusableInTouchMode="false"

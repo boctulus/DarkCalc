@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/keyboard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_weight="4.0"
+    >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0">
+
+        <Button
+            android:text="C"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_red"
+            android:id="@+id/c"
+            />
+
+        <Button
+            android:text="@string/undo"
+            style="@style/ButtonStyle"
+            android:textColor="@color/grey1"
+            android:background="@drawable/custom_button_yellow"
+            android:id="@+id/undo"
+            />
+
+        <Button
+            android:text="@string/redo"
+            style="@style/ButtonStyle"
+            android:textColor="@color/grey1"
+            android:background="@drawable/custom_button_yellow"
+            android:id="@+id/redo"
+            />
+
+        <Button
+            android:id="@+id/del"
+            style="@style/ButtonStyle"
+            android:background="@drawable/custom_button_black"
+            android:text="@string/backspace"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0">
+
+
+
+        <Button
+            android:text="%"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/per"
+            />
+
+        <Button
+            android:id="@+id/inv"
+            style="@style/ButtonStyle"
+            android:background="@drawable/custom_button_purple"
+            android:text="@string/inv"
+            android:textColor="@color/white" />
+
+        <Button
+            android:text="@string/sqr"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/sqr"
+            />
+
+        <Button
+            android:text="( )"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/par"
+            />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0">
+
+
+
+        <Button
+            android:text="7"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_black"
+            android:id="@+id/d7"
+            />
+
+        <Button
+            android:text="8"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_black"
+            android:id="@+id/d8"
+            />
+
+        <Button
+            android:text="9"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_black"
+            android:id="@+id/d9"
+            />
+
+        <Button
+            android:text="@string/div"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/div"
+            />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0">
+
+
+
+        <Button
+            android:text="4"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_black"
+            android:id="@+id/d4"
+            />
+
+        <Button
+            android:text="5"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_black"
+            android:id="@+id/d5"
+            />
+
+        <Button
+            android:text="6"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_black"
+            android:id="@+id/d6"
+            />
+
+        <Button
+            android:text="@string/mul"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/mul"
+            />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0">
+
+
+
+        <Button
+            android:text="1"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_black"
+            android:id="@+id/d1"
+            />
+
+        <Button
+            android:text="2"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_black"
+            android:id="@+id/d2"
+            />
+
+        <Button
+            android:text="3"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_black"
+            android:id="@+id/d3"
+            />
+
+        <Button
+            android:text="@string/sub"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/sub"
+            />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0">
+
+
+
+        <Button
+            android:text="."
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_black"
+            android:id="@+id/dot"
+            />
+
+        <Button
+            android:text="0"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_black"
+            android:id="@+id/d0"
+            />
+
+        <Button
+            android:text="="
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_blue"
+            android:id="@+id/equ"
+            />
+
+        <Button
+            android:text="@string/add"
+            style="@style/ButtonStyle"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_button_purple"
+            android:id="@+id/add"
+            />
+    </LinearLayout>
+
+
+
+</LinearLayout>

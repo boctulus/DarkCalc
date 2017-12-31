@@ -19,7 +19,8 @@ import android.util.TypedValue;
  * Created by pc on 21/12/2017.
  */
 
-public class AutoResizeEditText extends android.support.v7.widget.AppCompatEditText {   private static final int NO_LINE_LIMIT = -1;
+public class AutoResizeEditText extends android.support.v7.widget.AppCompatEditText {
+    private static final int NO_LINE_LIMIT = -1;
     private final RectF _availableSpaceRect = new RectF();
     private final SparseIntArray _textCachedSizes = new SparseIntArray();
     private final SizeTester _sizeTester;
