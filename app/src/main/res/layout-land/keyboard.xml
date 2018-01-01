@@ -338,12 +338,11 @@
             />
 
         <Button
-            android:text="x!"
+            android:id="@+id/fact"
             style="@style/ButtonStyle"
-            android:textColor="@color/white"
             android:background="@drawable/custom_button_purple"
-            android:id="@+id/xp"
-            />
+            android:text="x!"
+            android:textColor="@color/white" />
 
         <Button
             android:text="@string/pxy"
