@@ -33,6 +33,7 @@ public class AutoResizeEditText extends android.support.v7.widget.AppCompatEditT
     private boolean _enableSizeCache = true;
     private boolean _initiallized = false;
     private TextPaint paint;
+    private int maxHeight;
 
     final static String DEBUG  = "DEBUG";
 
@@ -306,5 +307,35 @@ public class AutoResizeEditText extends android.support.v7.widget.AppCompatEditT
         super.onSelectionChanged(start, end);
     }
 */
+
+
+    /*
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (maxHeight > 0){
+            int hSize = MeasureSpec.getSize(heightMeasureSpec);
+            int hMode = MeasureSpec.getMode(heightMeasureSpec);
+
+            switch (hMode){
+                case MeasureSpec.AT_MOST:
+                    heightMeasureSpec = MeasureSpec.makeMeasureSpec(Math.min(hSize, maxHeight), MeasureSpec.AT_MOST);
+                    break;
+                case MeasureSpec.UNSPECIFIED:
+                    heightMeasureSpec = MeasureSpec.makeMeasureSpec(maxHeight, MeasureSpec.AT_MOST);
+                    break;
+                case MeasureSpec.EXACTLY:
+                    heightMeasureSpec = MeasureSpec.makeMeasureSpec(Math.min(hSize, maxHeight), MeasureSpec.EXACTLY);
+                    break;
+            }
+        }
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
+    public void setMaxHeight(int h){
+        maxHeight = h;
+    }
+    */
 
 }

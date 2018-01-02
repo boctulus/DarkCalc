@@ -20,14 +20,12 @@ import android.widget.LinearLayout;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.objecthunter.exp4j.function.Function;
-import net.objecthunter.exp4j.ValidationResult;
 import net.objecthunter.exp4j.operator.Operator;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -41,8 +39,7 @@ public class MainActivity extends AppCompatActivity
     //private int digit_count   = 0;
     private boolean is_result  = false;
 
-    List<String> resultHistory    = new ArrayList<>();
-    List<String> expresionHistory = new ArrayList<>();
+    private HistoryManager history = new HistoryManager();
 
     private  ClipboardManager clipboardManager;
 
@@ -135,7 +132,6 @@ public class MainActivity extends AppCompatActivity
         disp2_et.requestFocus();
         disp2_et.setEnableSizeCache(false);
         //disp2_et.setMovementMethod(null);
-        //disp2_et.setMaxHeight(330);
         disp1_et.setCursorVisible(false);
         disp2_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
@@ -180,7 +176,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        /*
         kbLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -188,7 +183,15 @@ public class MainActivity extends AppCompatActivity
                 kbLayout.setMinimumHeight(kbLayout.getHeight());
             }
         });
-        */
+
+        disp2_et.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                disp2_et.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                disp2_et.setMaxHeight(disp2_et.getHeight());
+            }
+        });
+
 
         for (int rix = 0; rix< kbLayout.getChildCount(); rix++){
             final View elem = (View) kbLayout.getChildAt(rix);
@@ -205,6 +208,8 @@ public class MainActivity extends AppCompatActivity
 
                         int id = b.getId();
                         String newEntry = b.getText().toString();
+
+                        Calculation c;
 
                         if (has_error)
                             display.clear();
@@ -225,7 +230,7 @@ public class MainActivity extends AppCompatActivity
 
                             case R.id.del:
                                 display.backspace();
-                                break;
+                                return;
 
                             // Operators
 
@@ -574,6 +579,25 @@ public class MainActivity extends AppCompatActivity
                                 //Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
                                 break;
 
+                            case R.id.undo:
+                                c = history.pull();
+
+                                if (c!=null){
+                                    display.setFormula("");
+                                    display.setText(prettySymbols(c.expression));
+                                }
+
+                                return;
+
+                            case R.id.redo:
+                                c = history.next();
+
+                                if (c!=null){
+                                    display.setFormula("");
+                                    display.setText(prettySymbols(c.expression));
+                                }
+                                return;
+
                             /*
                                 EQUALS
 
@@ -604,14 +628,13 @@ public class MainActivity extends AppCompatActivity
                                 //Log.d(DEBUG,inputExpr);
 
                                 try {
-                                    // Create an Expression (A class from exp4j library)
                                     Expression expression = new ExpressionBuilder(inputExpr).function(sum).operator(factorial).build();
 
-                                    // Calculate the result and display
                                     double result = expression.evaluate();
                                     String strRes = Double.toString(result);
 
-                                    resultHistory.add(inputExpr);
+                                    // Guardo en el historial
+                                    history.push(inputExpr,strRes);
 
                                     has_dot   = (strRes.contains("."));
                                     has_error = (strRes.contains("NaN") || Double.isInfinite(result));
@@ -623,7 +646,7 @@ public class MainActivity extends AppCompatActivity
                                     else {
 
                                         disp1_et.setText("");
-                                        disp1_et.append(prettyFormat(inputExpr));
+                                        disp1_et.append(prettySymbols(inputExpr));
                                         display.setText(formatCurrency(strRes).replace(",",""));
 
                                         Log.d(DEBUG,"FORMULA: "+display.getFormula());
@@ -690,7 +713,7 @@ public class MainActivity extends AppCompatActivity
     } // end fn
 
 
-    private String prettyFormat(String s){
+    private String prettySymbols(String s){
         s = s.replace("-","−");
         s = s.replace("*","×");
         s = s.replace("/","÷");
@@ -700,20 +723,8 @@ public class MainActivity extends AppCompatActivity
         return s;
     }
 
-    private boolean openedParentheses(String expr){
-        return (countMatches("(",expr)>countMatches(")",expr));
-    }
-
-    private boolean closedParentheses(String expr){
-        return (countMatches("(",expr)<countMatches(")",expr));
-    }
-
     private boolean balancedParentheses(String expr){
         return (countMatches("(",expr)==countMatches(")",expr));
-    }
-
-    private boolean noneParentheses(String expr){
-        return ((countMatches("(",expr)==0 && countMatches(")",expr)==0));
     }
 
     private void clearMemory(){
@@ -955,16 +966,20 @@ public class MainActivity extends AppCompatActivity
             return doBalance(formula);
         }
 
+        public void setFormula(String s){
+            formula = s;
+        }
+
         public void setText(String s){
             disp2_et.setText("");
             disp2_et.append(s);
 
-            Log.d(DEBUG,"ANT. SET TEXT: "+formula);
+            //Log.d(DEBUG,"ANT. SET TEXT: "+formula);
 
             if (sync)
                 formula = s;
 
-            Log.d(DEBUG,"DSP. SET TEXT: "+formula);
+            //Log.d(DEBUG,"DSP. SET TEXT: "+formula);
         }
 
         public void append(String s){
@@ -981,6 +996,11 @@ public class MainActivity extends AppCompatActivity
         public void backspace(){
             String buffer = disp2_et.getText().toString();
 
+            if (has_error) {
+                clear();
+                return;
+            }
+
             if (!buffer.isEmpty()) {
                 disp2_et.setText(buffer.substring(0, buffer.length() - 1));
 
@@ -988,8 +1008,10 @@ public class MainActivity extends AppCompatActivity
                     has_dot = false;
             }
 
-            if (sync)
-                formula = formula.substring(0,formula.length()-1);
+            if (sync){
+                if (!formula.isEmpty())
+                    formula = formula.substring(0,formula.length()-1);
+            }
         }
 
         public void setError(String msg){
