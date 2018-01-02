@@ -36,8 +36,7 @@ public class MainActivity extends AppCompatActivity
     private boolean has_error  = false;
     private boolean is_number  = false;
     private boolean has_dot    = false;
-    //private int digit_count   = 0;
-    private boolean is_result  = false;
+    private String  last_op    = "";
 
     private HistoryManager history = new HistoryManager();
 
@@ -304,11 +303,10 @@ public class MainActivity extends AppCompatActivity
                                 break;
 
                             case R.id.per:
-                                if (bufferDisplay2.isEmpty())
+                                if (bufferDisplay2.isEmpty() || bufferDisplay2.contains("%"))
                                     return;
 
-                                if (!bufferDisplay2.endsWith("%"))
-                                    display.append(newEntry);
+                                display.append(newEntry);
 
                                 is_number = false;
                                 has_dot   = false;
@@ -614,7 +612,6 @@ public class MainActivity extends AppCompatActivity
                             case R.id.equ:
 
                                 String inputExpr = doBalance(display.getText());
-                                ///////display.setText(inputExpr);
 
                                 inputExpr = inputExpr.replace("\\u2212","-");
                                 inputExpr = inputExpr.replace("−","-");
@@ -637,7 +634,11 @@ public class MainActivity extends AppCompatActivity
                                 //Log.d(DEBUG,inputExpr);
 
                                 try {
-                                    Expression expression = new ExpressionBuilder(inputExpr).function(sum).operator(factorial).build();
+
+                                    inputExpr = preParser(inputExpr);
+                                    Log.d(DEBUG,"EXPRESION: "+inputExpr);
+                                    
+                                    Expression expression = new ExpressionBuilder(inputExpr).function(sum).function(percent).operator(factorial).build();
 
                                     double result = expression.evaluate();
                                     String strRes = Double.toString(result);
@@ -648,7 +649,6 @@ public class MainActivity extends AppCompatActivity
                                     has_dot   = (strRes.contains("."));
                                     has_error = (strRes.contains("NaN") || Double.isInfinite(result));
                                     is_number = !has_error;
-                                    is_result = true;
 
                                     if (has_error)
                                         display.setError();
@@ -666,7 +666,7 @@ public class MainActivity extends AppCompatActivity
 
                                 } catch (Exception ex) {
                                     display.setError();
-                                    Log.d(DEBUG,ex.toString());
+                                    Log.d(DEBUG,"ERROR: "+ex.toString());
                                 }
 
                                 break;
@@ -873,6 +873,48 @@ public class MainActivity extends AppCompatActivity
         return expr;
     }
 
+    private static String implode(String[] arr, String glue, int cant)
+    {
+        boolean first = true;
+        StringBuilder str = new StringBuilder();
+        for (int i=0;i<cant;i++) {
+            if (!first) str.append(glue);
+            str.append(arr[i]);
+            first = false;
+        }
+        return str.toString();
+    }
+
+    private static String preParser(String s){
+        String[] expr_lst;
+        String monto;
+        String inc;
+
+        String operators = "-+%";
+        expr_lst = s.split("(?=["+operators+"])|(?<=["+operators+"])");
+
+        if (expr_lst[expr_lst.length-1].equals("%")){
+            inc   = expr_lst[expr_lst.length-3]+expr_lst[expr_lst.length-2];
+            monto = implode(expr_lst,"",expr_lst.length-3);
+            s = String.format("percent(%s,%s)",monto,inc);
+        }
+        return s;
+    }
+
+
+    /* Custom math functions */
+
+
+    public static final Function percent = new Function("percent",2) {
+        @Override
+        public double apply(double... args) {
+            double monto = args[0];
+            double inc = args[1];
+
+            return monto*(1 + inc*0.01);
+        }
+    };
+
 
     public static final Function sum = new Function("sum") {
         @Override
@@ -1043,8 +1085,6 @@ public class MainActivity extends AppCompatActivity
             has_error  = false;
             is_number  = false;
             has_dot    = false;
-            //digit_count = 0;
-            is_result  = false;
             formula    = "";
 
             disp1_et.setText("");
