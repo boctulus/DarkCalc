@@ -27,6 +27,7 @@
             android:textColor="@color/white"
             android:background="@drawable/custom_button_yellow"
             android:id="@+id/undo"
+            android:textStyle="bold"
             />
 
         <Button
@@ -35,12 +36,13 @@
             android:textColor="@color/white"
             android:background="@drawable/custom_button_yellow"
             android:id="@+id/redo"
+            android:textStyle="bold"
             />
 
         <Button
             android:text="MRC"
             style="@style/ButtonStyle"
-            android:textColor="@color/grey1"
+            android:textColor="@color/white"
             android:background="@drawable/custom_button_green"
             android:id="@+id/mrc"
             />
@@ -48,7 +50,7 @@
         <Button
             android:text="M-"
             style="@style/ButtonStyle"
-            android:textColor="@color/grey1"
+            android:textColor="@color/white"
             android:background="@drawable/custom_button_green"
             android:id="@+id/mm"
             />
@@ -56,7 +58,7 @@
         <Button
             android:text="M+"
             style="@style/ButtonStyle"
-            android:textColor="@color/grey1"
+            android:textColor="@color/white"
             android:background="@drawable/custom_button_green"
             android:id="@+id/mp"
             />
@@ -66,13 +68,17 @@
             style="@style/ButtonStyle"
             android:background="@drawable/custom_button_black"
             android:text="@string/backspace"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            />
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1.0">
+        android:layout_weight="1.0"
+        android:id="@+id/buttonRow2"
+        >
 
 
 

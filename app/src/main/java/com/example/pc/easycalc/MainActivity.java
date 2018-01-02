@@ -2,12 +2,15 @@ package com.example.pc.easycalc;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Display;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.MenuItem;
@@ -33,16 +36,18 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
 {
+    private int     deviceWidth;
+    private int     deviceHeight;
+
     private boolean has_error  = false;
     private boolean is_number  = false;
     private boolean has_dot    = false;
     private String  last_op    = "";
 
-    private HistoryManager history = new HistoryManager();
+    private HistoryManager   history = new HistoryManager();
+    private ClipboardManager clipboardManager;
 
-    private  ClipboardManager clipboardManager;
-
-    static final String DEBUG = "DEBUG";
+    static final  String DEBUG = "DEBUG";
 
 
     private void hideBar(){
@@ -149,16 +154,32 @@ public class MainActivity extends AppCompatActivity
         //registerForContextMenu(disp1_et);
         registerForContextMenu(disp2_et);
 
+        final LinearLayout root             = findViewById(R.id.root);
         final LinearLayout displayLayout    = findViewById(R.id.display);
         final LinearLayout kbLayout         = findViewById(R.id.keyboard);
         final LinearLayout disp1_contLayout = findViewById(R.id.disp1Container);
         final LinearLayout disp2_contLayout = findViewById(R.id.disp2Container);
 
-
         /*
         * Evito colapsos
         * */
 
+
+        root.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout(){
+                deviceWidth = root.getWidth();
+                deviceHeight =  root.getHeight();
+
+                LinearLayout row = findViewById(R.id.buttonRow2);
+
+                if (isPortait() && ((double) deviceHeight / deviceWidth < 1.65)){
+                    row.setVisibility(LinearLayout.GONE);
+                }
+
+                Log.d(DEBUG, "RELACION: "+String.valueOf((double) deviceHeight / deviceWidth));
+            }
+        });
 
         displayLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -200,6 +221,7 @@ public class MainActivity extends AppCompatActivity
                 disp2_et.setMaxHeight(disp2_et.getHeight());
             }
         });
+
 
 
         for (int rix = 0; rix< kbLayout.getChildCount(); rix++){
@@ -634,17 +656,17 @@ public class MainActivity extends AppCompatActivity
                                 //Log.d(DEBUG,inputExpr);
 
                                 try {
+                                    String inputExpr_preparser = inputExpr;
+                                    inputExpr = parser(inputExpr);
+                                    //Log.d(DEBUG,"EXPRESION: "+inputExpr);
 
-                                    inputExpr = preParser(inputExpr);
-                                    Log.d(DEBUG,"EXPRESION: "+inputExpr);
-                                    
                                     Expression expression = new ExpressionBuilder(inputExpr).function(sum).function(percent).operator(factorial).build();
 
                                     double result = expression.evaluate();
                                     String strRes = Double.toString(result);
 
                                     // Guardo en el historial
-                                    history.push(inputExpr,strRes);
+                                    history.push(inputExpr_preparser,strRes);
 
                                     has_dot   = (strRes.contains("."));
                                     has_error = (strRes.contains("NaN") || Double.isInfinite(result));
@@ -873,6 +895,11 @@ public class MainActivity extends AppCompatActivity
         return expr;
     }
 
+    public boolean isPortait()
+    {
+        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+    }
+
     private static String implode(String[] arr, String glue, int cant)
     {
         boolean first = true;
@@ -885,7 +912,7 @@ public class MainActivity extends AppCompatActivity
         return str.toString();
     }
 
-    private static String preParser(String s){
+    private static String parser(String s){
         String[] expr_lst;
         String monto;
         String inc;
