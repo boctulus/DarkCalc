@@ -22,32 +22,24 @@ class HistoryManager {
         push(new Calculation(expression,result));
     }
 
-    @Nullable
     public Calculation pull(){
-        if (index>0) {
-            Calculation res = lista.get(index);
-            index--;
-            return res;
-        }
-        return null;
+        index--;
+        Calculation res = lista.get(index);
+        return res;
     }
 
-    @Nullable
     public Calculation next(){
-        if (hasNext()) {
-            index++;
-            Calculation res = lista.get(index);
-            return res;
-        }
-        return null;
+        index++;
+        Calculation res = lista.get(index);
+        return res;
     }
 
     public boolean isEmpty(){
         return lista.size()>0;
     }
 
-    public boolean isValid(){
-        return !isEmpty() && index>0;
+    public boolean hasPrev(){
+        return index>0;
     }
 
     public boolean hasNext(){

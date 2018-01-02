@@ -580,21 +580,20 @@ public class MainActivity extends AppCompatActivity
                                 break;
 
                             case R.id.undo:
-                                c = history.pull();
-
-                                if (c!=null){
-                                    display.setFormula("");
+                                if (history.hasPrev()){
+                                    c = history.pull();
+                                    display.setFormula(c.result);
                                     display.setText(prettySymbols(c.expression));
+                                    Log.d(DEBUG,c.toString());
                                 }
-
                                 return;
 
                             case R.id.redo:
-                                c = history.next();
-
-                                if (c!=null){
-                                    display.setFormula("");
+                                if (history.hasNext()){
+                                    c = history.next();
+                                    display.setFormula(c.result);
                                     display.setText(prettySymbols(c.expression));
+                                    Log.d(DEBUG,c.toString());
                                 }
                                 return;
 
@@ -968,6 +967,8 @@ public class MainActivity extends AppCompatActivity
 
         public void setFormula(String s){
             formula = s;
+            disp1_et.setText("");
+            disp1_et.append(s);
         }
 
         public void setText(String s){
