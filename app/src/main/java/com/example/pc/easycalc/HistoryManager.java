@@ -1,5 +1,7 @@
 package com.example.pc.easycalc;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -9,9 +11,13 @@ import java.util.List;
  * Created by pc on 01/01/2018.
  */
 
-class HistoryManager {
+class HistoryManager implements Parcelable {
     private List<Calculation> lista = new ArrayList<>();
     private int index = -1;
+
+    HistoryManager(){
+
+    }
 
     public void push(Calculation c){
         lista.add(c);
@@ -44,6 +50,34 @@ class HistoryManager {
 
     public boolean hasNext(){
         return index<lista.size()-1;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(index);
+        dest.writeList(lista);
+    }
+
+    public static final Parcelable.Creator<HistoryManager> CREATOR
+            = new Parcelable.Creator<HistoryManager>() {
+
+        public HistoryManager createFromParcel(Parcel in) {
+            return new HistoryManager(in);
+        }
+
+        public HistoryManager[] newArray(int size) {
+            return new HistoryManager[size];
+        }
+    };
+
+    private HistoryManager(Parcel in) {
+        index = in.readInt();
+        lista = in.readArrayList(Calculation.class.getClassLoader());
     }
 
 }

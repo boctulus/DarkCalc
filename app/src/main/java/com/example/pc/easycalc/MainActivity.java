@@ -69,6 +69,10 @@ public class MainActivity extends AppCompatActivity
         savedInstanceState.putBoolean("is_number",is_number);
         //savedInstanceState.putInt("digit_count",digit_count);
 
+        //////////////////////////////////////////////////////////////
+        savedInstanceState.putParcelable("historia", history);
+        //////////////////////////////////////////////////////////////
+
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -92,7 +96,13 @@ public class MainActivity extends AppCompatActivity
         has_dot = savedInstanceState.getBoolean("has_dot");
         is_number = savedInstanceState.getBoolean("is_number");
         //digit_count = savedInstanceState.getInt("digit_count");
+
+        //////////////////////////////////////////////////////////////
+        history =  savedInstanceState.getParcelable("historia");
+        //////////////////////////////////////////////////////////////
+
     }
+
 
 
     @Override
