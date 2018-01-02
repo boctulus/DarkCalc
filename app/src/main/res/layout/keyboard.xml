@@ -13,8 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.0">
 
-
-
         <Button
             android:text="C"
             style="@style/ButtonStyle"
@@ -30,6 +28,7 @@
             android:background="@drawable/custom_button_yellow"
             android:id="@+id/undo"
             android:textStyle="bold"
+            android:paddingTop="6sp"
             />
 
         <Button
@@ -39,6 +38,7 @@
             android:background="@drawable/custom_button_yellow"
             android:id="@+id/redo"
             android:textStyle="bold"
+            android:paddingTop="6sp"
             />
 
         <Button

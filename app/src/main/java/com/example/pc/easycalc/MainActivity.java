@@ -160,10 +160,6 @@ public class MainActivity extends AppCompatActivity
         final LinearLayout disp1_contLayout = findViewById(R.id.disp1Container);
         final LinearLayout disp2_contLayout = findViewById(R.id.disp2Container);
 
-        /*
-        * Evito colapsos
-        * */
-
 
         root.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -180,6 +176,11 @@ public class MainActivity extends AppCompatActivity
                 Log.d(DEBUG, "RELACION: "+String.valueOf((double) deviceHeight / deviceWidth));
             }
         });
+
+        /*
+        * Evito colapsos
+        * */
+
 
         displayLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

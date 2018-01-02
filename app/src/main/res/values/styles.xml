@@ -37,6 +37,7 @@
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">2</item>
         <item name="android:includeFontPadding">false</item>
+        <item name="android:paddingTop">@dimen/button_paddingTop</item>
         <item name="android:paddingBottom">@dimen/button_paddingBottom</item>
     </style>
     <!-- item name="android:textStyle">bold</item -->
