@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -42,12 +43,17 @@ public class MainActivity extends AppCompatActivity
     private boolean has_error  = false;
     private boolean is_number  = false;
     private boolean has_dot    = false;
-    private String  last_op    = "";
+    private double  acc        = 0;
 
     private HistoryManager   history = new HistoryManager();
     private ClipboardManager clipboardManager;
 
-    static final  String DEBUG = "DEBUG";
+    private static final int[] longClickFunctions = new int[] { R.id.del, R.id.sqr, R.id.par, R.id.sin,
+                                                                R.id.cos, R.id.tan, R.id.p2x, R.id.p10x,
+                                                                R.id.pex, R.id.log2, R.id.ln, R.id.log,
+                                                                R.id.fact, R.id.pxy  };
+
+    private static final String DEBUG = "DEBUG";
 
 
     private void hideBar(){
@@ -71,7 +77,7 @@ public class MainActivity extends AppCompatActivity
         savedInstanceState.putBoolean("has_error",has_error);
         savedInstanceState.putBoolean("has_dot",has_dot);
         savedInstanceState.putBoolean("is_number",is_number);
-        //savedInstanceState.putInt("digit_count",digit_count);
+        savedInstanceState.putDouble("acc",acc);
 
         //////////////////////////////////////////////////////////////
         savedInstanceState.putParcelable("historia", history);
@@ -99,7 +105,7 @@ public class MainActivity extends AppCompatActivity
         has_error = savedInstanceState.getBoolean("has_error");
         has_dot = savedInstanceState.getBoolean("has_dot");
         is_number = savedInstanceState.getBoolean("is_number");
-        //digit_count = savedInstanceState.getInt("digit_count");
+        acc = savedInstanceState.getInt("acc");
 
         //////////////////////////////////////////////////////////////
         history =  savedInstanceState.getParcelable("historia");
@@ -134,7 +140,6 @@ public class MainActivity extends AppCompatActivity
         //disp1_et.setFocusable(true);
         //disp1_et.requestFocus();
         //disp1_et.setMovementMethod(null);
-        //disp1_et.setMaxHeight(330);
         disp1_et.setCursorVisible(false);
         disp1_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
@@ -160,12 +165,12 @@ public class MainActivity extends AppCompatActivity
         final LinearLayout disp1_contLayout = findViewById(R.id.disp1Container);
         final LinearLayout disp2_contLayout = findViewById(R.id.disp2Container);
 
-
+        /*
         root.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout(){
-                deviceWidth = root.getWidth();
-                deviceHeight =  root.getHeight();
+                deviceWidth  = root.getWidth();
+                deviceHeight = root.getHeight();
 
                 LinearLayout row = findViewById(R.id.buttonRow2);
 
@@ -173,9 +178,10 @@ public class MainActivity extends AppCompatActivity
                     row.setVisibility(LinearLayout.GONE);
                 }
 
-                Log.d(DEBUG, "RELACION: "+String.valueOf((double) deviceHeight / deviceWidth));
             }
         });
+        */
+
 
         /*
         * Evito colapsos
@@ -224,6 +230,73 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+        for (int rfn : longClickFunctions){
+
+            try {
+
+                findViewById(rfn).setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Button b = (Button) v;
+                        String fn = b.getText().toString();
+
+                        switch (v.getId()) {
+
+                            case R.id.del:
+                                display.clear();
+                                break;
+
+                            case R.id.par:
+                                display.setText("(" + display.getText() + ")");
+                                break;
+
+                            case R.id.fact:
+                                display.setText("(" + display.getText() + ")!");
+                                break;
+
+                            case R.id.sqr:
+
+                            case R.id.log2:
+
+                            case R.id.ln:
+
+                            case R.id.log:
+
+                            case R.id.sin:
+
+                            case R.id.cos:
+
+                            case R.id.tan:
+                                display.setText(fn + "(" + display.getText() + ")");
+                                break;
+
+                            case R.id.p2x:
+                                display.setText("2^(" + display.getText() + ")");
+                                break;
+
+                            case R.id.p10x:
+                                display.setText("10^(" + display.getText() + ")");
+                                break;
+
+                            case R.id.pex:
+                                display.setText("e^(" + display.getText() + ")");
+                                break;
+
+                            case R.id.pxy:
+                                display.setText("(" + display.getText() + ")^");
+                                break;
+
+
+                        }
+                        return true;
+
+                    }
+                });
+            }catch (Exception ex) {
+
+            }
+        }
+
 
         for (int rix = 0; rix< kbLayout.getChildCount(); rix++){
             final View elem = (View) kbLayout.getChildAt(rix);
@@ -238,7 +311,6 @@ public class MainActivity extends AppCompatActivity
                     public void onClick(View v){
                         Button b = (Button) v;
 
-                        int id = b.getId();
                         String newEntry = b.getText().toString();
 
                         Calculation c;
@@ -248,16 +320,59 @@ public class MainActivity extends AppCompatActivity
 
                         String bufferDisplay2 = display.getText();
 
-                        switch (id)
+                        switch ( b.getId())
                         {
                             case R.id.c:
                                 display.clear();
                                 break;
 
+                            case R.id.mc:
+                                acc = 0;
+                                break;
+
+                            case R.id.ms:
+                                try {
+                                    acc = Double.valueOf(display.getText());
+                                }catch(NumberFormatException e) {
+
+                                }
+                                break;
+                            /*
                             case R.id.mp:
+                                try {
+                                    acc += Double.valueOf(display.getText());
+                                }catch(NumberFormatException e) {
+
+                                }
                                 break;
 
                             case R.id.mm:
+                                if (is_number)
+                                    acc-=Double.valueOf(display.getText());
+                                break;
+                            */
+                            case R.id.mr:
+                                try
+                                {
+                                    String strval = String.valueOf(acc);
+                                    Double.parseDouble(strval);
+
+                                    strval = formatCurrency(strval).replace(",","");
+
+                                    if (strval.equals("0"))
+                                        break;
+
+                                    if (is_number)
+                                        display.append("+"+strval);
+                                    else
+                                        display.append(strval);
+
+                                    is_number = true;
+                                }
+                                catch(NumberFormatException e)
+                                {
+                                    //not a double
+                                }
                                 break;
 
                             case R.id.del:
@@ -615,7 +730,7 @@ public class MainActivity extends AppCompatActivity
                                     c = history.pull();
                                     display.setFormula(c.result);
                                     display.setText(prettySymbols(c.expression));
-                                    Log.d(DEBUG,c.toString());
+                                    //Log.d(DEBUG,c.toString());
                                 }
                                 return;
 
@@ -624,7 +739,7 @@ public class MainActivity extends AppCompatActivity
                                     c = history.next();
                                     display.setFormula(c.result);
                                     display.setText(prettySymbols(c.expression));
-                                    Log.d(DEBUG,c.toString());
+                                    //Log.d(DEBUG,c.toString());
                                 }
                                 return;
 
@@ -681,15 +796,13 @@ public class MainActivity extends AppCompatActivity
                                         disp1_et.append(prettySymbols(inputExpr));
                                         display.setText(formatCurrency(strRes).replace(",",""));
 
-                                        Log.d(DEBUG,"FORMULA: "+display.getFormula());
+                                        //Log.d(DEBUG,"FORMULA: "+display.getFormula());
                                     }
 
 
-                                    //Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
-
                                 } catch (Exception ex) {
                                     display.setError();
-                                    Log.d(DEBUG,"ERROR: "+ex.toString());
+                                    //Log.d(DEBUG,"ERROR: "+ex.toString());
                                 }
 
                                 break;
@@ -714,11 +827,7 @@ public class MainActivity extends AppCompatActivity
                                     }
                                 }
 
-                                //if (digit_count >=4)
-                                //    Log.d(DEBUG,"FORMATEAR NUMERO EN "+bufferDisplay2);
-
                                 is_number = true;
-                                //digit_count++;
 
                             default:
                                 display.append(newEntry);
@@ -726,7 +835,7 @@ public class MainActivity extends AppCompatActivity
                         }
 
                         //
-                        Log.d(DEBUG,"FORMULA HASTA AHORA: "+display.getFormula());
+                        //Log.d(DEBUG,"FORMULA HASTA AHORA: "+display.getFormula());
 
                     }
                 });
@@ -1066,12 +1175,12 @@ public class MainActivity extends AppCompatActivity
         public void append(String s){
             disp2_et.append(s);
 
-            Log.d(DEBUG,"ANT. APPEND: "+formula);
+            //Log.d(DEBUG,"ANT. APPEND: "+formula);
 
             if (sync)
                 formula += s;
 
-            Log.d(DEBUG,"DSP. APPEND: "+formula);
+            //Log.d(DEBUG,"DSP. APPEND: "+formula);
         }
 
         public void backspace(){
@@ -1100,7 +1209,7 @@ public class MainActivity extends AppCompatActivity
             is_number = false;
             has_dot   = false;
             setText(msg);
-            Log.d(DEBUG,msg+" *****");
+            //Log.d(DEBUG,msg+" *****");
         }
 
         public void setError(){

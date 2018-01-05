@@ -25,7 +25,7 @@
             android:text="@string/undo"
             style="@style/ButtonStyle"
             android:textColor="@color/white"
-            android:background="@drawable/custom_button_yellow"
+            android:background="@drawable/custom_button_orange"
             android:id="@+id/undo"
             android:textStyle="bold"
             />
@@ -34,34 +34,31 @@
             android:text="@string/redo"
             style="@style/ButtonStyle"
             android:textColor="@color/white"
-            android:background="@drawable/custom_button_yellow"
+            android:background="@drawable/custom_button_orange"
             android:id="@+id/redo"
             android:textStyle="bold"
             />
 
         <Button
-            android:text="MRC"
+            android:id="@+id/ms"
             style="@style/ButtonStyle"
-            android:textColor="@color/white"
             android:background="@drawable/custom_button_green"
-            android:id="@+id/mrc"
-            />
+            android:text="MS"
+            android:textColor="@color/white" />
 
         <Button
-            android:text="M-"
+            android:id="@+id/mr"
             style="@style/ButtonStyle"
-            android:textColor="@color/white"
             android:background="@drawable/custom_button_green"
-            android:id="@+id/mm"
-            />
+            android:text="MR"
+            android:textColor="@color/white" />
 
         <Button
-            android:text="M+"
+            android:id="@+id/mc"
             style="@style/ButtonStyle"
-            android:textColor="@color/white"
             android:background="@drawable/custom_button_green"
-            android:id="@+id/mp"
-            />
+            android:text="MC"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/del"
@@ -135,6 +132,7 @@
             android:textColor="@color/white"
             android:background="@drawable/custom_button_purple"
             android:id="@+id/par"
+            android:textSize="18dp"
             />
     </LinearLayout>
 
@@ -375,12 +373,11 @@
             />
 
         <Button
-            android:text="="
-            style="@style/ButtonStyle"
-            android:textColor="@color/white"
-            android:background="@drawable/custom_button_blue"
             android:id="@+id/equ"
-            />
+            style="@style/ButtonStyle"
+            android:background="@drawable/custom_button_black"
+            android:text="="
+            android:textColor="@color/white" />
 
         <Button
             android:text="@string/add"

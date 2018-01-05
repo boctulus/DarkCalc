@@ -6,6 +6,6 @@
     <dimen name="disp2_fontSize">90sp</dimen>
     <dimen name="disp2_paddingBottom">4dp</dimen>
 
-    <dimen name="button_fontSize">20dp</dimen>
+    <dimen name="button_fontSize">20sp</dimen>
     <dimen name="button_paddingBottom">0sp</dimen>
 </resources>

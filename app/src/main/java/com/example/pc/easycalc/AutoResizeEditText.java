@@ -308,8 +308,7 @@ public class AutoResizeEditText extends android.support.v7.widget.AppCompatEditT
     }
 */
 
-
-    /*
+/*
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (maxHeight > 0){
@@ -336,6 +335,5 @@ public class AutoResizeEditText extends android.support.v7.widget.AppCompatEditT
     public void setMaxHeight(int h){
         maxHeight = h;
     }
-    */
-
+*/
 }

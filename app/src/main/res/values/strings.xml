@@ -4,6 +4,7 @@
     <string name="erase_to_the_left">\u232b</string>
     <string name="del">⟵</string>
     <string name="backspace">⇦</string>
+    <string name="shift">⇧</string>
     <string name="undo">↺</string>
     <string name="redo">↻</string>
     <string name="x2">x²</string>

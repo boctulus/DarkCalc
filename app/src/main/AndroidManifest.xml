@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:versionCode="1"
+        android:versionName="v0.99a"
         >
         <activity
             android:name=".MainActivity"

@@ -11,21 +11,21 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1.0">
+        android:layout_weight="1.0"
+        >
 
         <Button
-            android:text="C"
-            style="@style/ButtonStyle"
-            android:textColor="@color/white"
-            android:background="@drawable/custom_button_red"
             android:id="@+id/c"
-            />
+            style="@style/ButtonStyle"
+            android:background="@drawable/custom_button_red"
+            android:text="C"
+            android:textColor="@color/white" />
 
         <Button
             android:text="@string/undo"
             style="@style/ButtonStyle"
             android:textColor="@color/white"
-            android:background="@drawable/custom_button_yellow"
+            android:background="@drawable/custom_button_orange"
             android:id="@+id/undo"
             android:textStyle="bold"
             android:paddingTop="6sp"
@@ -35,20 +35,19 @@
             android:text="@string/redo"
             style="@style/ButtonStyle"
             android:textColor="@color/white"
-            android:background="@drawable/custom_button_yellow"
+            android:background="@drawable/custom_button_orange"
             android:id="@+id/redo"
             android:textStyle="bold"
             android:paddingTop="6sp"
             />
 
         <Button
-            android:text="@string/backspace"
-            style="@style/ButtonStyle"
-            android:textColor="@color/white"
-            android:background="@drawable/custom_button_black"
             android:id="@+id/del"
-            android:textStyle="bold"
-            />
+            style="@style/ButtonStyle"
+            android:background="@drawable/custom_button_black"
+            android:text="@string/backspace"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -56,40 +55,41 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
         android:id="@+id/buttonRow2"
+        android:visibility="gone"
         >
 
-        <Button
-            android:text="MC"
-            style="@style/ButtonStyle"
-            android:textColor="@color/white"
-            android:background="@drawable/custom_button_green"
-            android:id="@+id/mc"
-            />
 
         <Button
-            android:text="MR"
+            android:id="@+id/invf"
             style="@style/ButtonStyle"
+            android:background="@drawable/custom_button_blue"
+            android:text="INV"
             android:textColor="@color/white"
+            android:textSize="38sp" />
+
+        <Button
+            android:id="@+id/ms"
+            style="@style/ButtonStyle"
             android:background="@drawable/custom_button_green"
+            android:text="MS"
+            android:textColor="@color/white" />
+
+        <Button
             android:id="@+id/mr"
-            />
+            style="@style/ButtonStyle"
+            android:background="@drawable/custom_button_green"
+            android:text="MR"
+            android:textColor="@color/white" />
 
         <Button
-            android:text="M-"
+            android:id="@+id/mc"
             style="@style/ButtonStyle"
-            android:textColor="@color/white"
             android:background="@drawable/custom_button_green"
-            android:id="@+id/mm"
-            />
+            android:text="MC"
+            android:textColor="@color/white" />
 
-        <Button
-            android:text="M+"
-            style="@style/ButtonStyle"
-            android:textColor="@color/white"
-            android:background="@drawable/custom_button_green"
-            android:id="@+id/mp"
-            />
     </LinearLayout>
+
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -278,7 +278,7 @@
             android:text="="
             style="@style/ButtonStyle"
             android:textColor="@color/white"
-            android:background="@drawable/custom_button_blue"
+            android:background="@drawable/custom_button_black"
             android:id="@+id/equ"
             />
 
