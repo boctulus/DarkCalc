@@ -237,8 +237,14 @@ public class MainActivity extends AppCompatActivity
                 findViewById(rfn).setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
+                        if (display.getText().isEmpty())
+                            return false;
+
                         Button b = (Button) v;
                         String fn = b.getText().toString();
+
+                        //history.push(display.getText(),"");
+                        boolean alredy_op = display.getText().startsWith("(");
 
                         switch (v.getId()) {
 
@@ -247,47 +253,35 @@ public class MainActivity extends AppCompatActivity
                                 break;
 
                             case R.id.par:
-                                display.setText("(" + display.getText() + ")");
+                                display.setText((!alredy_op ? "(" : "") + display.getText() + (!alredy_op ? ")" : ""));
                                 break;
 
                             case R.id.fact:
-                                display.setText("(" + display.getText() + ")!");
-                                break;
-
-                            case R.id.sqr:
-
-                            case R.id.log2:
-
-                            case R.id.ln:
-
-                            case R.id.log:
-
-                            case R.id.sin:
-
-                            case R.id.cos:
-
-                            case R.id.tan:
-                                display.setText(fn + "(" + display.getText() + ")");
+                                display.setText((!alredy_op ? "(" : "") + display.getText() + (!alredy_op ? ")!" : "!"));
                                 break;
 
                             case R.id.p2x:
-                                display.setText("2^(" + display.getText() + ")");
+                                display.setText("2^"+ (!alredy_op ? "(" : "") + display.getText() + (!alredy_op ? ")" : ""));
                                 break;
 
                             case R.id.p10x:
-                                display.setText("10^(" + display.getText() + ")");
+                                display.setText("10^"+  (!alredy_op ? "(" : "") + display.getText() + (!alredy_op ? ")" : ""));
                                 break;
 
                             case R.id.pex:
-                                display.setText("e^(" + display.getText() + ")");
+                                display.setText("e^"+ (!alredy_op ? "(" : "") + display.getText() + (!alredy_op ? ")" : ""));
                                 break;
 
                             case R.id.pxy:
-                                display.setText("(" + display.getText() + ")^");
+                                display.setText((!alredy_op ? "(" : "") + display.getText() + (!alredy_op ? ")^" : "^"));
                                 break;
 
+                            default:
+                                display.setText(fn + (!alredy_op ? "(" : "") + display.getText() + (!alredy_op ? ")" : ""));
+                                break;
 
                         }
+
                         return true;
 
                     }
