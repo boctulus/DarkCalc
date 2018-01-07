@@ -7,10 +7,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.Display;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.MenuItem;
@@ -19,7 +17,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -42,8 +39,10 @@ public class MainActivity extends AppCompatActivity
 
     private boolean has_error  = false;
     private boolean is_number  = false;
+    private int     number_len = 0;
     private boolean has_dot    = false;
     private double  acc        = 0;
+
 
     private HistoryManager   history = new HistoryManager();
     private ClipboardManager clipboardManager;
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity
         has_error = savedInstanceState.getBoolean("has_error");
         has_dot = savedInstanceState.getBoolean("has_dot");
         is_number = savedInstanceState.getBoolean("is_number");
-        acc = savedInstanceState.getInt("acc");
+        acc = savedInstanceState.getDouble("acc");
 
         //////////////////////////////////////////////////////////////
         history =  savedInstanceState.getParcelable("historia");
@@ -141,7 +140,7 @@ public class MainActivity extends AppCompatActivity
         //disp1_et.requestFocus();
         //disp1_et.setMovementMethod(null);
         disp1_et.setCursorVisible(false);
-        disp1_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        disp1_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 
 
         final AutoResizeEditText disp2_et = findViewById(R.id.disp2);
@@ -151,8 +150,7 @@ public class MainActivity extends AppCompatActivity
         disp2_et.requestFocus();
         disp2_et.setEnableSizeCache(false);
         //disp2_et.setMovementMethod(null);
-        disp1_et.setCursorVisible(false);
-        disp2_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        disp2_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 
 
         // Register the context menu to the the EditText
@@ -362,6 +360,7 @@ public class MainActivity extends AppCompatActivity
                                         display.append(strval);
 
                                     is_number = true;
+                                    number_len= strval.length();
                                 }
                                 catch(NumberFormatException e)
                                 {
@@ -387,6 +386,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.sub:
@@ -402,6 +402,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.mul:
@@ -417,6 +418,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.div:
@@ -432,6 +434,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.per:
@@ -442,6 +445,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             // Functions
@@ -456,6 +460,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.sqr:
@@ -470,6 +475,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.sin:
@@ -484,6 +490,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.cos:
@@ -498,6 +505,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.tan:
@@ -512,6 +520,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.ln:
@@ -526,6 +535,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.log2:
@@ -540,6 +550,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.log:
@@ -554,6 +565,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.pex:
@@ -568,6 +580,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.p2x:
@@ -594,6 +607,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.pxy:
@@ -606,6 +620,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             // Custom functions
@@ -618,6 +633,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             case R.id.fact:
@@ -656,6 +672,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             // Parentheses
@@ -699,6 +716,7 @@ public class MainActivity extends AppCompatActivity
 
                                 is_number = false;
                                 has_dot   = false;
+                                number_len= 0;
                                 break;
 
                             // Dot
@@ -708,12 +726,14 @@ public class MainActivity extends AppCompatActivity
                                     display.append(".");
                                     has_dot   = true;
                                     is_number = true;
+                                    number_len++;
                                 }else
                                 if (bufferDisplay2.isEmpty() || bufferDisplay2.endsWith("(") || bufferDisplay2.endsWith("+") ||
                                         bufferDisplay2.endsWith("−") || bufferDisplay2.endsWith("×") || bufferDisplay2.endsWith("÷")) {
                                     display.append("0.");
                                     has_dot   = true;
                                     is_number = true;
+                                    number_len= 2;
                                 }
 
                                 //Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
@@ -724,7 +744,8 @@ public class MainActivity extends AppCompatActivity
                                     c = history.pull();
                                     display.setFormula(c.result);
                                     display.setText(prettySymbols(c.expression));
-                                    //Log.d(DEBUG,c.toString());
+
+
                                 }
                                 return;
 
@@ -733,7 +754,7 @@ public class MainActivity extends AppCompatActivity
                                     c = history.next();
                                     display.setFormula(c.result);
                                     display.setText(prettySymbols(c.expression));
-                                    //Log.d(DEBUG,c.toString());
+
                                 }
                                 return;
 
@@ -767,7 +788,7 @@ public class MainActivity extends AppCompatActivity
 
                                 try {
                                     String inputExpr_preparser = inputExpr;
-                                    inputExpr = parser(inputExpr);
+                                    inputExpr = preCalcParser(inputExpr);
                                     //Log.d(DEBUG,"EXPRESION: "+inputExpr);
 
                                     Expression expression = new ExpressionBuilder(inputExpr).function(sum).function(percent).operator(factorial).build();
@@ -781,6 +802,9 @@ public class MainActivity extends AppCompatActivity
                                     has_dot   = (strRes.contains("."));
                                     has_error = (strRes.contains("NaN") || Double.isInfinite(result));
                                     is_number = !has_error;
+
+                                    if (is_number)
+                                        number_len= strRes.length();
 
                                     if (has_error)
                                         display.setError();
@@ -814,6 +838,16 @@ public class MainActivity extends AppCompatActivity
                             case R.id.d8:
                             case R.id.d9:
 
+                                // "00"
+                                if (newEntry.equals("0") && display.getText().equals("0"))
+                                    return;
+
+                                // "00"
+                                if (newEntry.equals("0") && number_len==1 && display.getText().endsWith("0"))
+                                    return;
+
+                                number_len++;
+
                                 for (String cte : constants) {
                                     if (bufferDisplay2.endsWith(cte)){
                                         display.append("×");
@@ -830,6 +864,8 @@ public class MainActivity extends AppCompatActivity
 
                         //
                         //Log.d(DEBUG,"FORMULA HASTA AHORA: "+display.getFormula());
+                        displayLayout.requestFocus();
+                        displayLayout.requestFocusFromTouch();
 
                     }
                 });
@@ -948,6 +984,11 @@ public class MainActivity extends AppCompatActivity
             disp2_et.append(newText);
             disp2_et.requestFocus();
 
+            /*
+             Deberia parsear la expresion y determinar si termina con una cifra para setear
+             is_number , has_dot y number_len
+              */
+
         }catch(NullPointerException e){}
 
 
@@ -1016,7 +1057,7 @@ public class MainActivity extends AppCompatActivity
         return str.toString();
     }
 
-    private static String parser(String s){
+    private static String preCalcParser(String s){
         String[] expr_lst;
         String monto;
         String inc;
@@ -1127,6 +1168,14 @@ public class MainActivity extends AppCompatActivity
     };
 
 
+    private boolean isLastCharDigit(String s){
+       return  (s.endsWith("0") || s.endsWith("1") || s.endsWith("2") ||
+                s.endsWith("3") || s.endsWith("4") || s.endsWith("5") ||
+                s.endsWith("6") || s.endsWith("7") || s.endsWith("8") ||
+                s.endsWith("9"));
+    }
+
+
     /*
         La idea es sincronizar los cambios con el display1 para las formulas
    */
@@ -1137,6 +1186,7 @@ public class MainActivity extends AppCompatActivity
 
         final private  EditText disp1_et = findViewById(R.id.disp1);
         final private  EditText disp2_et = findViewById(R.id.disp2);
+        final private  LinearLayout display = findViewById(R.id.display);
 
 
         public String getText(){
@@ -1155,30 +1205,38 @@ public class MainActivity extends AppCompatActivity
         }
 
         public void setText(String s){
+
             disp2_et.setText("");
             disp2_et.append(s);
 
-            //Log.d(DEBUG,"ANT. SET TEXT: "+formula);
+            //Log.d(DEBUG,"ANT. SET TEXT: "+getText());
 
             if (sync)
                 formula = s;
+            //Log.d(DEBUG,"DSP. SET TEXT: "+getText());
 
-            //Log.d(DEBUG,"DSP. SET TEXT: "+formula);
+            display.requestFocus();
+            display.requestFocusFromTouch();
         }
 
         public void append(String s){
-            disp2_et.append(s);
 
-            //Log.d(DEBUG,"ANT. APPEND: "+formula);
+            //Log.d(DEBUG,"ANT. APPEND: "+getText());
+
+            //if (s.equals("0") && getText().equals("0")) {
+            //    return;
+            //}
+
+            disp2_et.append(s);
 
             if (sync)
                 formula += s;
 
-            //Log.d(DEBUG,"DSP. APPEND: "+formula);
+            //Log.d(DEBUG,"DSP. APPEND: "+getText());
         }
 
         public void backspace(){
-            String buffer = disp2_et.getText().toString();
+            String buffer   = disp2_et.getText().toString();
 
             if (has_error) {
                 clear();
@@ -1186,16 +1244,31 @@ public class MainActivity extends AppCompatActivity
             }
 
             if (!buffer.isEmpty()) {
-                disp2_et.setText(buffer.substring(0, buffer.length() - 1));
+                disp2_et.setText("");
+                disp2_et.append(buffer.substring(0, buffer.length() - 1));
 
                 if (buffer.endsWith("."))
                     has_dot = false;
+                else
+                    if (isLastCharDigit(getText())){
+                        number_len--;
+                    }
             }
+
+            // puede haber borrado el ultimo caracter
+            if (getText().isEmpty()) {
+                is_number  = false;
+                number_len = 0;
+            }
+
 
             if (sync){
                 if (!formula.isEmpty())
                     formula = formula.substring(0,formula.length()-1);
             }
+
+            display.requestFocus();
+            display.requestFocusFromTouch();
         }
 
         public void setError(String msg){
@@ -1216,10 +1289,14 @@ public class MainActivity extends AppCompatActivity
             has_error  = false;
             is_number  = false;
             has_dot    = false;
+            number_len = 0;
             formula    = "";
 
             disp1_et.setText("");
             disp2_et.setText("");
+
+            disp2_et.requestFocus();
+            disp2_et.requestFocusFromTouch();
         }
 
         public void copy(){

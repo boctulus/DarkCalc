@@ -24,7 +24,7 @@
             android:textSize="@dimen/disp1_fontSize"
             android:paddingTop="2dp"
 
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textNoSuggestions|textVisiblePassword"
             />
     </LinearLayout>
 
@@ -42,7 +42,7 @@
             android:paddingBottom="@dimen/disp2_paddingBottom"
             android:textSize="@dimen/disp2_fontSize"
 
-            android:inputType="text|textNoSuggestions"
+            android:inputType="textNoSuggestions|textVisiblePassword"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:textIsSelectable="true"
