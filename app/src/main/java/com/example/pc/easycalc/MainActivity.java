@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -42,15 +42,16 @@ public class MainActivity extends AppCompatActivity
     private int     number_len = 0;
     private boolean has_dot    = false;
     private double  acc        = 0;
+    private String  formula    = "";
 
-
-    private HistoryManager   history = new HistoryManager();
+    private DisplayManger display;
+    private HistoryManager   history  = new HistoryManager();
     private ClipboardManager clipboardManager;
 
     private static final int[] longClickFunctions = new int[] { R.id.del, R.id.sqr, R.id.par, R.id.sin,
-                                                                R.id.cos, R.id.tan, R.id.p2x, R.id.p10x,
-                                                                R.id.pex, R.id.log2, R.id.ln, R.id.log,
-                                                                R.id.fact, R.id.pxy  };
+            R.id.cos, R.id.tan, R.id.p2x, R.id.p10x,
+            R.id.pex, R.id.log2, R.id.ln, R.id.log,
+            R.id.fact, R.id.pxy  };
 
     private static final String DEBUG = "DEBUG";
 
@@ -64,10 +65,11 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().hide();
     }
 
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
 
-        EditText rdisp1 = findViewById(R.id.disp1);
+        TextView rdisp1 = findViewById(R.id.disp1);
         savedInstanceState.putString("disp1",rdisp1.getText().toString());
 
         AutoResizeEditText rdisp2 = findViewById(R.id.disp2);
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity
         savedInstanceState.putBoolean("has_dot",has_dot);
         savedInstanceState.putBoolean("is_number",is_number);
         savedInstanceState.putDouble("acc",acc);
+        savedInstanceState.putInt("number_len",number_len);
 
         //////////////////////////////////////////////////////////////
         savedInstanceState.putParcelable("historia", history);
@@ -92,7 +95,7 @@ public class MainActivity extends AppCompatActivity
         super.onRestoreInstanceState(savedInstanceState);
 
         String rdisp1 = savedInstanceState.getString("disp1");
-        EditText disp1 = findViewById(R.id.disp1);
+        TextView disp1 = findViewById(R.id.disp1);
         disp1.setText("");
         disp1.append(rdisp1);
 
@@ -105,6 +108,7 @@ public class MainActivity extends AppCompatActivity
         has_dot = savedInstanceState.getBoolean("has_dot");
         is_number = savedInstanceState.getBoolean("is_number");
         acc = savedInstanceState.getDouble("acc");
+        number_len = savedInstanceState.getInt("number_len");
 
         //////////////////////////////////////////////////////////////
         history =  savedInstanceState.getParcelable("historia");
@@ -124,16 +128,18 @@ public class MainActivity extends AppCompatActivity
 
         // Reserved keywords
         String[] constant_lst = new String[]{"Pi","PI","π","e","NA"};
-        String[] function_lst    = new String[]{"sin","cos","tan","asin","acos","atan", "sinh","cosh","tanh","asinh","acosh","atanh","sum","prod","ln","log","log2","log10"};
+        String[] function_lst = new String[]{"sin","cos","tan","asin","acos","atan", "sinh","cosh","tanh","asinh","acosh","atanh","sum","prod","ln","log","log2","log10"};
 
         final List<String> functions = Arrays.asList(function_lst);
         final List<String> constants = Arrays.asList(constant_lst);
-        final DisplayManger display = new DisplayManger();
+        display = new DisplayManger();
+
+        final TextView           disp1_et = findViewById(R.id.disp1);
+        final AutoResizeEditText disp2_et = findViewById(R.id.disp2);
 
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
 
-        final EditText disp1_et = findViewById(R.id.disp1);
         //disp1_et.setEnabled(true);
         //disp1_et.setFocusableInTouchMode(true);
         //disp1_et.setFocusable(true);
@@ -143,7 +149,6 @@ public class MainActivity extends AppCompatActivity
         disp1_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 
 
-        final AutoResizeEditText disp2_et = findViewById(R.id.disp2);
         disp2_et.setEnabled(true);
         disp2_et.setFocusable(true);
         disp2_et.setFocusableInTouchMode(true);
@@ -247,7 +252,7 @@ public class MainActivity extends AppCompatActivity
                         switch (v.getId()) {
 
                             case R.id.del:
-                                display.clear();
+                                clear();
                                 break;
 
                             case R.id.par:
@@ -308,14 +313,14 @@ public class MainActivity extends AppCompatActivity
                         Calculation c;
 
                         if (has_error)
-                            display.clear();
+                            clear();
 
                         String bufferDisplay2 = display.getText();
 
                         switch ( b.getId())
                         {
                             case R.id.c:
-                                display.clear();
+                                clear();
                                 break;
 
                             case R.id.mc:
@@ -613,7 +618,7 @@ public class MainActivity extends AppCompatActivity
                             case R.id.pxy:
                                 if (bufferDisplay2.isEmpty() || bufferDisplay2.endsWith("(") || bufferDisplay2.endsWith("+") ||
                                         bufferDisplay2.endsWith("−") || bufferDisplay2.endsWith("×") || bufferDisplay2.endsWith("÷")) {
-                                    display.setError();
+                                    showError();
                                 }
                                 else
                                     display.append("^(");
@@ -742,7 +747,7 @@ public class MainActivity extends AppCompatActivity
                             case R.id.undo:
                                 if (history.hasPrev()){
                                     c = history.pull();
-                                    display.setFormula(c.result);
+                                    setFormula(c.result);
                                     display.setText(prettySymbols(c.expression));
 
 
@@ -752,7 +757,7 @@ public class MainActivity extends AppCompatActivity
                             case R.id.redo:
                                 if (history.hasNext()){
                                     c = history.next();
-                                    display.setFormula(c.result);
+                                    setFormula(c.result);
                                     display.setText(prettySymbols(c.expression));
 
                                 }
@@ -807,7 +812,7 @@ public class MainActivity extends AppCompatActivity
                                         number_len= strRes.length();
 
                                     if (has_error)
-                                        display.setError();
+                                        showError();
                                     else {
 
                                         disp1_et.setText("");
@@ -819,7 +824,7 @@ public class MainActivity extends AppCompatActivity
 
 
                                 } catch (Exception ex) {
-                                    display.setError();
+                                    showError();
                                     //Log.d(DEBUG,"ERROR: "+ex.toString());
                                 }
 
@@ -874,7 +879,7 @@ public class MainActivity extends AppCompatActivity
             }
 
 
-            disableSoftInput((EditText) findViewById(R.id.disp1));
+            //disableSoftInput((EditText) findViewById(R.id.disp1));
             disableSoftInput((EditText) findViewById(R.id.disp2));
 
         }
@@ -1107,12 +1112,12 @@ public class MainActivity extends AppCompatActivity
                     sum += i;
                 }
             else
-                if (args.length==2)
-                    for (int i= (int) args[0]; i<=(int) args[1];i++) {
-                        sum += i;
-                    }
-                 else
-                    throw new IllegalArgumentException("Sum() requires one or two arguments!");
+            if (args.length==2)
+                for (int i= (int) args[0]; i<=(int) args[1];i++) {
+                    sum += i;
+                }
+            else
+                throw new IllegalArgumentException("Sum() requires one or two arguments!");
 
             return sum;
         }
@@ -1169,74 +1174,86 @@ public class MainActivity extends AppCompatActivity
 
 
     private boolean isLastCharDigit(String s){
-       return  (s.endsWith("0") || s.endsWith("1") || s.endsWith("2") ||
+        return  (s.endsWith("0") || s.endsWith("1") || s.endsWith("2") ||
                 s.endsWith("3") || s.endsWith("4") || s.endsWith("5") ||
                 s.endsWith("6") || s.endsWith("7") || s.endsWith("8") ||
                 s.endsWith("9"));
     }
 
+    // Clear both displays
+    private void clear(){
+        TextView disp1_et = findViewById(R.id.disp1);
+        display.clear();
+        disp1_et.setText("");
+    }
+
+    public void showError(){
+        copyToFormulaDisplay();
+        display.setError(" ERROR ");
+    }
+
+    private void copyToFormulaDisplay(){
+        TextView disp1_et = findViewById(R.id.disp1);
+        String txt = display.getText();
+        disp1_et.setText(txt);
+    }
+
 
     /*
-        La idea es sincronizar los cambios con el display1 para las formulas
+        Los siguientes metodos podrian incluirse en una clase Formula que extenderia a TextView
+     */
+    private void setFormula(String s){
+        final TextView disp1_et = findViewById(R.id.disp1);
+        formula = s;
+        disp1_et.setText("");
+        disp1_et.append(s);
+    }
+
+    // debe reemplazar "#" si lo hay por su expresion correspondiente
+    public String getFormula(){
+        return doBalance(formula);
+    }
+
+
+    /*
+        Debe pasar a ser una clase que extienda a AutoResizeEditTExt
+        sin referencias a otro display (no acoplada)
    */
     class DisplayManger
     {
-        private boolean sync   = true;
-        private String formula = "";
-
-        final private  EditText disp1_et = findViewById(R.id.disp1);
-        final private  EditText disp2_et = findViewById(R.id.disp2);
-        final private  LinearLayout display = findViewById(R.id.display);
-
+        final private  EditText d2et = findViewById(R.id.disp2);
+        //  private boolean sync   = true;
 
         public String getText(){
-            return disp2_et.getText().toString();
-        }
-
-        // debe reemplazar "#" si lo hay por su expresion correspondiente
-        public String getFormula(){
-            return doBalance(formula);
-        }
-
-        public void setFormula(String s){
-            formula = s;
-            disp1_et.setText("");
-            disp1_et.append(s);
+            return d2et.getText().toString();
         }
 
         public void setText(String s){
 
-            disp2_et.setText("");
-            disp2_et.append(s);
+            d2et.setText("");
+            d2et.append(s);
 
-            //Log.d(DEBUG,"ANT. SET TEXT: "+getText());
+            //if (sync)
+            //   formula = s;
 
-            if (sync)
-                formula = s;
-            //Log.d(DEBUG,"DSP. SET TEXT: "+getText());
-
-            display.requestFocus();
-            display.requestFocusFromTouch();
+            //display.requestFocus();
+            //display.requestFocusFromTouch();
         }
 
         public void append(String s){
-
-            //Log.d(DEBUG,"ANT. APPEND: "+getText());
 
             //if (s.equals("0") && getText().equals("0")) {
             //    return;
             //}
 
-            disp2_et.append(s);
+            d2et.append(s);
 
-            if (sync)
-                formula += s;
-
-            //Log.d(DEBUG,"DSP. APPEND: "+getText());
+            //if (sync)
+            //   formula += s;
         }
 
         public void backspace(){
-            String buffer   = disp2_et.getText().toString();
+            String buffer   = d2et.getText().toString();
 
             if (has_error) {
                 clear();
@@ -1244,15 +1261,15 @@ public class MainActivity extends AppCompatActivity
             }
 
             if (!buffer.isEmpty()) {
-                disp2_et.setText("");
-                disp2_et.append(buffer.substring(0, buffer.length() - 1));
+                d2et.setText("");
+                d2et.append(buffer.substring(0, buffer.length() - 1));
 
                 if (buffer.endsWith("."))
                     has_dot = false;
                 else
-                    if (isLastCharDigit(getText())){
-                        number_len--;
-                    }
+                if (isLastCharDigit(getText())){
+                    number_len--;
+                }
             }
 
             // puede haber borrado el ultimo caracter
@@ -1262,13 +1279,13 @@ public class MainActivity extends AppCompatActivity
             }
 
 
-            if (sync){
-                if (!formula.isEmpty())
-                    formula = formula.substring(0,formula.length()-1);
-            }
+            //if (sync){
+            //    if (!formula.isEmpty())
+            //        formula = formula.substring(0,formula.length()-1);
+            //}
 
-            display.requestFocus();
-            display.requestFocusFromTouch();
+            //display.requestFocus();
+            //display.requestFocusFromTouch();
         }
 
         public void setError(String msg){
@@ -1279,30 +1296,17 @@ public class MainActivity extends AppCompatActivity
             //Log.d(DEBUG,msg+" *****");
         }
 
-        public void setError(){
-            copy();
-            setError(" ERROR ");
-        }
-
 
         public void clear(){
             has_error  = false;
             is_number  = false;
             has_dot    = false;
             number_len = 0;
-            formula    = "";
+            //formula    = "";
+            d2et.setText("");
 
-            disp1_et.setText("");
-            disp2_et.setText("");
-
-            disp2_et.requestFocus();
-            disp2_et.requestFocusFromTouch();
         }
 
-        public void copy(){
-            String txt = getText();
-            disp1_et.setText(txt);
-        }
 
 
     }

@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.0">
 
-        <com.example.pc.easycalc.FormulaTextEdit
+        <TextView
             android:id="@+id/disp1"
             style="@style/DisplayStyle"
             android:textColor="@color/quasiWhite"
@@ -24,9 +24,9 @@
             android:textSize="@dimen/disp1_fontSize"
             android:paddingTop="2dp"
             android:layout_marginTop="5sp"
-
-            android:inputType="text|textNoSuggestions"
             />
+           <!--     android:inputType="text|textNoSuggestions" -->
+
     </LinearLayout>
 
 
