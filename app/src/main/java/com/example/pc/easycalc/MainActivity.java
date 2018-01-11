@@ -1184,7 +1184,7 @@ public class MainActivity extends AppCompatActivity
         String buffer      = d2et.getText().toString();
         int cursorPosition = d2et.getSelectionStart();
 
-        return (buffer.length()>0 ?  buffer.substring(cursorPosition-1,cursorPosition) : "");
+        return (buffer.length()>0 && cursorPosition>0 ?  buffer.substring(cursorPosition-1,cursorPosition) : "");
     }
 
     private boolean isPrevChar(String s){
@@ -1313,7 +1313,7 @@ public class MainActivity extends AppCompatActivity
 
                 // ya no seria endsWidth pues es respecto del cursor
                 // tampoco tiene sentido mantener "has_dot" excepto se utilice para el ultimo numero de la expresion
-                if (buffer.endsWith("."))
+                if (isPrevChar("."))
                     has_dot = false;
                 else
                 if (isLastCharDigit()){
