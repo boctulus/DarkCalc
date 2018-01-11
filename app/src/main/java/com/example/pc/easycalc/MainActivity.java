@@ -5,8 +5,10 @@ import android.content.ClipboardManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity
     private static final int[] longClickFunctions = new int[] { R.id.del, R.id.sqr, R.id.par, R.id.sin,
             R.id.cos, R.id.tan, R.id.p2x, R.id.p10x,
             R.id.pex, R.id.log2, R.id.ln, R.id.log,
-            R.id.fact, R.id.pxy  };
+            R.id.fact, R.id.sum, R.id.pxy  };
 
     private static final String DEBUG = "DEBUG";
 
@@ -634,6 +636,10 @@ public class MainActivity extends AppCompatActivity
                                 if (bufferDisplay2.isEmpty())
                                     display.setText(newEntry+"(");
                                 else
+                                if (bufferDisplay2.endsWith("(") || bufferDisplay2.endsWith("+") || bufferDisplay2.endsWith("−") ||
+                                        bufferDisplay2.endsWith("×") || bufferDisplay2.endsWith("÷"))
+                                    display.append(newEntry+"(");
+                                else
                                     display.append("×"+newEntry+"(");
 
                                 is_number = false;
@@ -1173,17 +1179,25 @@ public class MainActivity extends AppCompatActivity
     };
 
 
-    private boolean isLastCharDigit(String s){
-        return  (s.endsWith("0") || s.endsWith("1") || s.endsWith("2") ||
-                s.endsWith("3") || s.endsWith("4") || s.endsWith("5") ||
-                s.endsWith("6") || s.endsWith("7") || s.endsWith("8") ||
-                s.endsWith("9"));
+    @Nullable
+    private String prevChar(){
+        EditText d2et      = findViewById(R.id.disp2);
+        String buffer      = d2et.getText().toString();
+        int cursorPosition = d2et.getSelectionStart();
+
+        return (buffer.length()>0 ?  buffer.substring(cursorPosition-1,cursorPosition) : null);
+    }
+
+    // Necesita hacer referencia a la posicion del cursor
+    private boolean isLastCharDigit(){
+        String s = prevChar();
+        return  (s=="0" || s=="1" || s=="2" || s=="3" || s=="4" || s=="5" || s=="6" || s=="7" || s=="8" || s=="9");
     }
 
     // Clear both displays
     private void clear(){
-        TextView disp1_et = findViewById(R.id.disp1);
         display.clear();
+        TextView disp1_et = findViewById(R.id.disp1);
         disp1_et.setText("");
     }
 
@@ -1247,6 +1261,7 @@ public class MainActivity extends AppCompatActivity
             //}
 
             d2et.append(s);
+            d2et.setSelection(d2et.getText().toString().length());
 
             //if (sync)
             //   formula += s;
@@ -1255,19 +1270,33 @@ public class MainActivity extends AppCompatActivity
         public void backspace(){
             String buffer   = d2et.getText().toString();
 
+            int cursorPosition = d2et.getSelectionStart();
+            Log.d(DEBUG,"Pos: "+String.valueOf(cursorPosition)); ///
+
             if (has_error) {
                 clear();
                 return;
             }
 
-            if (!buffer.isEmpty()) {
-                d2et.setText("");
-                d2et.append(buffer.substring(0, buffer.length() - 1));
+            if (!buffer.isEmpty() && cursorPosition!=0) {
 
+                String strtmp0 = buffer.substring(0, cursorPosition-1);
+                d2et.setText("");
+                d2et.append(strtmp0);
+
+                if (buffer.length() >= cursorPosition) {
+                    String strtmp1 = buffer.substring(cursorPosition, buffer.length());
+                    d2et.append(strtmp1);
+                }
+
+                d2et.setSelection(cursorPosition-1);
+
+                // ya no seria endsWidth pues es respecto del cursor
+                // tampoco tiene sentido mantener "has_dot" excepto se utilice para el ultimo numero de la expresion
                 if (buffer.endsWith("."))
                     has_dot = false;
                 else
-                if (isLastCharDigit(getText())){
+                if (isLastCharDigit()){
                     number_len--;
                 }
             }
@@ -1304,7 +1333,6 @@ public class MainActivity extends AppCompatActivity
             number_len = 0;
             //formula    = "";
             d2et.setText("");
-
         }
 
 
