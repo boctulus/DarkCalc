@@ -5,7 +5,6 @@ import android.content.ClipboardManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
@@ -318,6 +317,7 @@ public class MainActivity extends AppCompatActivity
                             clear();
 
                         String bufferDisplay2 = display.getText();
+                        int cursorPos = display.getCursorPosition();
 
                         switch ( b.getId())
                         {
@@ -372,6 +372,7 @@ public class MainActivity extends AppCompatActivity
                                 catch(NumberFormatException e)
                                 {
                                     //not a double
+                                    showError();
                                 }
                                 break;
 
@@ -391,10 +392,11 @@ public class MainActivity extends AppCompatActivity
                                     else
                                         display.appendAfterCursor(newEntry);
 
-                                // esta parte debe cambiar:
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.sub:
@@ -408,9 +410,11 @@ public class MainActivity extends AppCompatActivity
                                     else
                                         display.appendAfterCursor("−");
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.mul:
@@ -424,9 +428,11 @@ public class MainActivity extends AppCompatActivity
                                     }else
                                         display.appendAfterCursor(newEntry);
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.div:
@@ -440,9 +446,11 @@ public class MainActivity extends AppCompatActivity
                                     }else
                                         display.appendAfterCursor(newEntry);
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.per:
@@ -451,9 +459,11 @@ public class MainActivity extends AppCompatActivity
 
                                 display.appendAfterCursor(newEntry);
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             // Functions
@@ -466,9 +476,11 @@ public class MainActivity extends AppCompatActivity
                                     display.appendAfterCursor("1÷("+bufferDisplay2+")");
                                 }
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.sqr:
@@ -481,9 +493,11 @@ public class MainActivity extends AppCompatActivity
                                 else
                                     display.appendAfterCursor("×"+newEntry+"(");
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.sin:
@@ -496,9 +510,11 @@ public class MainActivity extends AppCompatActivity
                                 else
                                     display.appendAfterCursor("×"+newEntry+"(");
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.cos:
@@ -511,9 +527,11 @@ public class MainActivity extends AppCompatActivity
                                 else
                                     display.appendAfterCursor("×"+newEntry+"(");
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.tan:
@@ -526,9 +544,11 @@ public class MainActivity extends AppCompatActivity
                                 else
                                     display.appendAfterCursor("×"+newEntry+"(");
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.ln:
@@ -541,9 +561,11 @@ public class MainActivity extends AppCompatActivity
                                 else
                                     display.appendAfterCursor("×"+newEntry+"(");
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.log2:
@@ -556,9 +578,11 @@ public class MainActivity extends AppCompatActivity
                                 else
                                     display.appendAfterCursor("×"+"log2"+"(");
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.log:
@@ -571,9 +595,11 @@ public class MainActivity extends AppCompatActivity
                                 else
                                     display.appendAfterCursor("×"+newEntry+"(");
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.pex:
@@ -586,9 +612,11 @@ public class MainActivity extends AppCompatActivity
                                 else
                                     display.appendAfterCursor("×e^(");
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.p2x:
@@ -613,9 +641,11 @@ public class MainActivity extends AppCompatActivity
                                 else
                                     display.appendAfterCursor("×10^"+"(");
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.pxy:
@@ -626,9 +656,11 @@ public class MainActivity extends AppCompatActivity
                                 else
                                     display.appendAfterCursor("^(");
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             // Custom functions
@@ -643,9 +675,11 @@ public class MainActivity extends AppCompatActivity
                                 else
                                     display.appendAfterCursor("×"+newEntry+"(");
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             case R.id.fact:
@@ -662,9 +696,11 @@ public class MainActivity extends AppCompatActivity
                                 else
                                     display.appendAfterCursor("×"+"prod"+"(");
 
-                                is_number = false;
-                                has_dot   = false;
-                                break;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                             */
 
                             // Constants
@@ -682,9 +718,11 @@ public class MainActivity extends AppCompatActivity
                                 else
                                     display.appendAfterCursor("×"+newEntry);
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             // Parentheses
@@ -726,9 +764,11 @@ public class MainActivity extends AppCompatActivity
                                             display.appendAfterCursor(")");
                                 }
 
-                                is_number = false;
-                                has_dot   = false;
-                                number_len= 0;
+                                if (cursorPos == bufferDisplay2.length()) {
+                                    is_number = false;
+                                    has_dot = false;
+                                    number_len = 0;
+                                }
                                 break;
 
                             // Dot
@@ -736,16 +776,22 @@ public class MainActivity extends AppCompatActivity
                             case R.id.dot:
                                 if (is_number && !has_dot) {
                                     display.appendAfterCursor(".");
-                                    has_dot   = true;
-                                    is_number = true;
-                                    number_len++;
+
+                                    if (cursorPos == bufferDisplay2.length()) {
+                                        has_dot = true;
+                                        is_number = true;
+                                        number_len++;
+                                    }
                                 }else
                                 if (bufferDisplay2.isEmpty() || isPrevChar("(") || isPrevChar("+") ||
                                         isPrevChar("−") || isPrevChar("×") || isPrevChar("÷")) {
                                     display.appendAfterCursor("0.");
-                                    has_dot   = true;
-                                    is_number = true;
-                                    number_len= 2;
+
+                                    if (cursorPos == bufferDisplay2.length()) {
+                                        has_dot = true;
+                                        is_number = true;
+                                        number_len = 2;
+                                    }
                                 }
 
                                 //Log.d(DEBUG,"Has dot? "+ (has_dot ? "YES" : "NO"));
@@ -1356,6 +1402,9 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+        public int getCursorPosition(){
+            return d2et.getSelectionStart();
+        }
 
     }
 
