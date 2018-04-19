@@ -1,4 +1,4 @@
-package com.example.pc.easycalc;
+package com.boctulus.pc.ReCalc;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -156,8 +156,7 @@ public class MainActivity extends AppCompatActivity
         disp2_et.requestFocus();
         disp2_et.setEnableSizeCache(false);
         //disp2_et.setMovementMethod(null);
-        disp2_et.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-
+        disp2_et.setInputType(InputType.TYPE_NULL);
 
         // Register the context menu to the the EditText
         //registerForContextMenu(disp1_et);
@@ -415,6 +414,8 @@ public class MainActivity extends AppCompatActivity
                                     has_dot = false;
                                     number_len = 0;
                                 }
+
+                                display.enter();
                                 break;
 
                             case R.id.mul:
@@ -498,6 +499,8 @@ public class MainActivity extends AppCompatActivity
                                     has_dot = false;
                                     number_len = 0;
                                 }
+
+                                display.enter();
                                 break;
 
                             case R.id.sin:
@@ -723,6 +726,7 @@ public class MainActivity extends AppCompatActivity
                                     has_dot = false;
                                     number_len = 0;
                                 }
+                                display.enter();
                                 break;
 
                             // Parentheses
@@ -732,43 +736,46 @@ public class MainActivity extends AppCompatActivity
                                 if (bufferDisplay2.isEmpty())
                                     display.appendAfterCursor("(");
                                 else
-                                if (isPrevChar("("))
-                                    display.appendAfterCursor("(");
-                                else
-                                if (is_number) {
-                                    if (balancedParentheses(bufferDisplay2))
-                                        display.appendAfterCursor("×(");
+                                    if (isPrevChar("("))
+                                        display.appendAfterCursor("(");
                                     else
-                                        display.appendAfterCursor(")");
-                                }else
-                                if (isPrevChar(")"))
-                                    if (balancedParentheses(bufferDisplay2))
-                                        display.appendAfterCursor("×(");
-                                    else
-                                        display.appendAfterCursor(")");
-                                else {
-                                    boolean fn_found = false;
-                                    for (String fn : functions) {
-                                        if (isPrevChar(fn)){
-                                            display.appendAfterCursor("(");
-                                            fn_found = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!fn_found)
-                                        if (isPrevChar("+") || isPrevChar("−") ||
-                                                isPrevChar("×") || isPrevChar("÷"))
-                                            display.appendAfterCursor("(");
-                                        else
-                                            // asumo es una constante como 'π' o 'e'
-                                            display.appendAfterCursor(")");
-                                }
+                                        if (is_number) {
+                                            if (balancedParentheses(bufferDisplay2))
+                                                display.appendAfterCursor("×(");
+                                            else
+                                                display.appendAfterCursor(")");
+                                        }else
+                                            if (isPrevChar(")"))
+                                                if (balancedParentheses(bufferDisplay2))
+                                                    display.appendAfterCursor("×(");
+                                                else
+                                                    display.appendAfterCursor(")");
+                                            else {
+                                                boolean fn_found = false;
+                                                for (String fn : functions) {
+                                                    if (isPrevChar(fn)){
+                                                        display.appendAfterCursor("(");
+                                                        fn_found = true;
+                                                        break;
+                                                    }
+                                                }
+                                                if (!fn_found)
+                                                    if (isPrevChar("+") || isPrevChar("−") ||
+                                                            isPrevChar("×") || isPrevChar("÷"))
+                                                        display.appendAfterCursor("(");
+                                                    else
+                                                        // asumo es una constante como 'π' o 'e'
+                                                        display.appendAfterCursor(")");
+                                            }
 
                                 if (cursorPos == bufferDisplay2.length()) {
                                     is_number = false;
                                     has_dot = false;
                                     number_len = 0;
                                 }
+
+                                display.setText(display.getText());
+
                                 break;
 
                             // Dot
@@ -839,6 +846,7 @@ public class MainActivity extends AppCompatActivity
                                 inputExpr = inputExpr.replace("∑(","sum(");
                                 inputExpr = inputExpr.replace("NA","(6.022140857E-23)");
 
+
                                 // Elimina separador de miles para el ExpressionBuilder
                                 //inputExpr = inputExpr.replace(",","");
 
@@ -854,6 +862,12 @@ public class MainActivity extends AppCompatActivity
                                     double result = expression.evaluate();
                                     String strRes = Double.toString(result);
 
+                                    //Log.d(DEBUG,"|||"+strRes+"|||");
+
+                                    // -0 = +0
+                                    if (strRes == "-0")
+                                        strRes = "0";
+
                                     // Guardo en el historial
                                     history.push(inputExpr_preparser,strRes);
 
@@ -862,7 +876,7 @@ public class MainActivity extends AppCompatActivity
                                     is_number = !has_error;
 
                                     if (is_number)
-                                        number_len= strRes.length();
+                                        number_len = strRes.length();
 
                                     if (has_error)
                                         showError();
@@ -1331,6 +1345,10 @@ public class MainActivity extends AppCompatActivity
             }
 
             d2et.setSelection(cursorPosition+1);
+        }
+
+        public void enter(){
+            this.setText(this.getText());
         }
 
         public void backspace(){

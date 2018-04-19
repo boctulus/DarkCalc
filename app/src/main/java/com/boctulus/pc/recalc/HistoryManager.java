@@ -1,8 +1,7 @@
-package com.example.pc.easycalc;
+package com.boctulus.pc.ReCalc;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;

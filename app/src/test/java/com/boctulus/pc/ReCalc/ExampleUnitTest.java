@@ -1,4 +1,4 @@
-package com.example.pc.easycalc;
+package com.example.pc.ReCalc;
 
 import org.junit.Test;
 

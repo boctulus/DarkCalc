@@ -1,4 +1,4 @@
-package com.example.pc.easycalc;
+package com.boctulus.pc.ReCalc;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.pc.easycalc.MainActivity"
+    tools:context="com.example.pc.ReCalc.MainActivity"
     >
     <item
         android:id="@+id/itemcopy"

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pc.easycalc">
+    package="com.boctulus.pc.recalc">
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/redo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/redo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:versionCode="1"
         android:versionName="v0.99a"
         >
         <activity
-            android:name=".MainActivity"
+            android:name="com.boctulus.pc.recalc.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

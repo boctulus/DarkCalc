@@ -1,4 +1,4 @@
-package com.example.pc.easycalc;
+package com.example.pc.ReCalc;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.pc.easycalc", appContext.getPackageName());
+        assertEquals("com.example.pc.ReCalc", appContext.getPackageName());
     }
 }

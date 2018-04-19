@@ -10,7 +10,7 @@
     >
 
 
-    ¿ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/disp1Container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,14 +36,14 @@
         android:layout_height="wrap_content"
         android:layout_weight="3.0">
 
-        <com.example.pc.easycalc.AutoResizeEditText
+        <com.example.pc.ReCalc.AutoResizeEditText
             style="@style/DisplayStyle"
             android:id="@+id/disp2"
             android:gravity="top|end"
             android:paddingBottom="@dimen/disp2_paddingBottom"
             android:textSize="@dimen/disp2_fontSize"
 
-            android:inputType="text|textNoSuggestions"
+            android:inputType="none"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:textIsSelectable="true"
