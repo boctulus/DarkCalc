@@ -1,5 +1,4 @@
 # DarkCalc
-
 Full classic calculator + memories + redo-undo
 
 ReCalc calculator includes:
